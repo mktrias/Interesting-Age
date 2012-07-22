@@ -3,6 +3,13 @@ body {
 	font-size: 12px;
 }
 
+button {
+	background: #def;
+}
+
+button.show {
+	background: #9af;
+}
 
 .item, .header {
 	background: #cdf;

@@ -7,6 +7,9 @@
 
 <!-- thanks to datejs.com -->
 <script type="text/javascript" src="date.js"></script>
+
+<!-- main.css was generated from main.scss using sass  (syntactically awesome stylesheets)
+http://sass-lang.com/  -->
 <link rel="stylesheet" type="text/css" href="main.css" />
 </head>
 
@@ -16,15 +19,27 @@
 
 <p id="#form-message"></p>
 <form id="birthday" action="json-echo.php" method="GET">
-Enter your Birthday:<br>
-Year: <input type="text" name="year" value="" />
-Month: 
-<select name="month" id="month">
-</select>
-Day: <select name="day" id="day">
-</select> <br>
+	Enter your Birthday:<br>
+	Year: <input type="text" name="year" value="" />
+	Month: <select name="month" id="month"></select>
+	Day: <select name="day" id="day"></select> <br>
 <input type="submit" value="Submit" />
 </form>
+
+<div id="showhide">
+	<button type="button" id="pow2_" class="">Power of 2</button>
+	<button type="button" id="pow10_" class="">Power of 10</button>
+	<button type="button" id="factorial" class="">Factorial</button>
+	<button type="button" id="repunit" class="">Repunit</button>
+	<button type="button" id="bell" class="">Bell</button>
+	<button type="button" id="fibonacci" class="">Fibonacci</button><br />
+	<button type="button" id="catalan" class="">Catalan</button>
+	<button type="button" id="planet" class="">Planets</button>
+	<button type="button" id="primes" class="">Primes</button>
+	<button type="button" id="fermat" class="">Fermat</button>
+	<button type="button" id="mersenne" class="">Mersenne</button>
+	<button type="button" id="digits" class="">Digits</button>
+</div>
 
 <div id="allresults">
 	<div class="header">
@@ -33,6 +48,8 @@ Day: <select name="day" id="day">
 		<div class="age">Age (approx)</div>
 	</div>
 </div>
+
+
 
 <script>
 
@@ -408,6 +425,7 @@ function add_Row(array) {
 	var unit = array["unit"];
 	var number = array["number"];
 	var factor = array["factor"];
+	var list_name = array["list_name"];
 
 	var default_date = Date.today();
 
@@ -415,7 +433,7 @@ function add_Row(array) {
 	dayclone.addMilliseconds(number*factor);
 	var date = dayclone.toString("hh:MM MMM d, yyyy");
 
-	$("#allresults").append("<div class=\"item "+elem+"\"></div>");
+	$("#allresults").append("<div class=\"item "+list_name+" "+elem+"\"></div>");
 		$(".item."+elem).append("<div class=\"time\">"+lab+" "+unit+"</div>");
 		$(".item."+elem).append("<div class=\"date "+elem+"\">"+date+"</div>");
 		$(".item."+elem).append("<div class=\"age "+elem+"\"></div>");
@@ -427,6 +445,8 @@ function add_Row(array) {
 		ageclass = myage *10;
 	};
 	$(".item."+elem).addClass("age"+ageclass);
+	$(".item."+list_name).hide();
+
 }
 
 function edit_Row(bday, array) {
@@ -439,9 +459,16 @@ function edit_Row(bday, array) {
 	var date = dayclone.toString("hh:MM MMM d, yyyy");
 
 	$(".date."+elem).html(date);
-
 }
 
+
+function hideList(list_name) {
+	$(".item."+list_name).hide();
+}
+
+function showList(list_name) {
+	$(".item."+list_name).show();
+}
 
 var count = 0;
 
@@ -451,7 +478,7 @@ var ms_min = 1000*60;
 var ms_hr = 1000*60*60;
 var ms_dy = 1000*60*60*24;
 
-function addto_master(array, number, factor, element, label) {
+function addto_master(array, number, factor, element, label, list_name) {
 
 	var unit = "";
 	if (factor == ms_ms) {
@@ -472,156 +499,230 @@ function addto_master(array, number, factor, element, label) {
 	array[count]["element"] = element+unit;
 	array[count]["label"] = label;
 	array[count]["unit"] = unit;
+	array[count]["list_name"] = list_name;
 
 	count++;
 
 }
 
-function make_repunit_list() {
+function addto_master_planet(array, number, factor, element, label, list_name) {
+	array[count] = [];
+	array[count]["number"] = number;
+	array[count]["factor"] = factor;
+	array[count]["element"] = element;
+	array[count]["label"] = label;
+	array[count]["unit"] = "";
+	array[count]["list_name"] = list_name;
+
+	count++;
+}
+
+function make_repunit_list(list_name) {
 	var repunit_list = [];
 	count = 0;
 
-	for (var i=9; i<=10; i++) { addto_master(repunit_list, repunit[i], ms_s, "repunit_"+i, "repunit("+i+")"); }
-	for (var i=7; i<=8; i++) { addto_master(repunit_list, repunit[i], ms_min, "repunit_"+i, "repunit("+i+")"); }
-	for (var i=5; i<=7; i++) { addto_master(repunit_list, repunit[i], ms_hr, "repunit_"+i, "repunit("+i+")"); }
-	for (var i=4; i<=5; i++) { addto_master(repunit_list, repunit[i], ms_dy, "repunit_"+i, "repunit("+i+")"); }
+	for (var i=9; i<=10; i++) { addto_master(repunit_list, repunit[i], ms_s,   "repunit"+i, "repunit("+i+")", list_name); }
+	for (var i=7; i<=8; i++)  { addto_master(repunit_list, repunit[i], ms_min, "repunit"+i, "repunit("+i+")", list_name); }
+	for (var i=5; i<=7; i++)  { addto_master(repunit_list, repunit[i], ms_hr,  "repunit"+i, "repunit("+i+")", list_name); }
+	for (var i=4; i<=5; i++)  { addto_master(repunit_list, repunit[i], ms_dy,  "repunit"+i, "repunit("+i+")", list_name); }
 
 	return repunit_list;
 }
 
-function make_bell_list() {
+function make_bell_list(list_name) {
 	var bell_list = [];
 	count = 0;
 
-	for (var i=17; i<=18; i++) { addto_master(bell_list, bell[i], ms_ms, "bell_"+i,"bell("+i+")"); }
-	for (var i=14; i<=15; i++) { addto_master(bell_list, bell[i], ms_s, "bell_"+i,"bell("+i+")"); }
-	for (var i=11; i<=13; i++) { addto_master(bell_list, bell[i], ms_min, "bell_"+i,"bell("+i+")"); }
-	for (var i=9; i<=11; i++)  { addto_master(bell_list, bell[i], ms_hr, "bell_"+i,"bell("+i+")"); }
-	for (var i=7; i<=9; i++)   { addto_master(bell_list, bell[i], ms_dy, "bell_"+i,"bell("+i+")"); }
+	for (var i=17; i<=18; i++) { addto_master(bell_list, bell[i], ms_ms,  "bell"+i, "bell("+i+")", list_name); }
+	for (var i=14; i<=15; i++) { addto_master(bell_list, bell[i], ms_s,   "bell"+i, "bell("+i+")", list_name); }
+	for (var i=11; i<=13; i++) { addto_master(bell_list, bell[i], ms_min, "bell"+i, "bell("+i+")", list_name); }
+	for (var i=9; i<=11; i++)  { addto_master(bell_list, bell[i], ms_hr,  "bell"+i, "bell("+i+")", list_name); }
+	for (var i=7; i<=9; i++)   { addto_master(bell_list, bell[i], ms_dy,  "bell"+i, "bell("+i+")", list_name); }
 
 	return bell_list;
 }
 
-function make_catalan_list() {
+function make_catalan_list(list_name) {
 	var catalan_list = [];
 	count = 0;
 
-	for (var i=22; i<=24; i++) { addto_master(catalan_list, catalan[i], ms_ms, "catalan_"+i,"catalan("+i+")"); }
-	for (var i=16; i<=19; i++) { addto_master(catalan_list, catalan[i], ms_s, "catalan_"+i,"catalan("+i+")"); }
-	for (var i=13; i<=16; i++) { addto_master(catalan_list, catalan[i], ms_min, "catalan_"+i,"catalan("+i+")"); }
-	for (var i=10; i<=13; i++) { addto_master(catalan_list, catalan[i], ms_hr, "catalan_"+i,"catalan("+i+")"); }
-	for (var i=7; i<=10; i++)  { addto_master(catalan_list, catalan[i], ms_dy, "catalan_"+i,"catalan("+i+")"); }
+	for (var i=22; i<=24; i++) { addto_master(catalan_list, catalan[i], ms_ms,  "catalan"+i, "catalan("+i+")", list_name); }
+	for (var i=16; i<=19; i++) { addto_master(catalan_list, catalan[i], ms_s,   "catalan"+i, "catalan("+i+")", list_name); }
+	for (var i=13; i<=16; i++) { addto_master(catalan_list, catalan[i], ms_min, "catalan"+i, "catalan("+i+")", list_name); }
+	for (var i=10; i<=13; i++) { addto_master(catalan_list, catalan[i], ms_hr,  "catalan"+i, "catalan("+i+")", list_name); }
+	for (var i=7; i<=10; i++)  { addto_master(catalan_list, catalan[i], ms_dy,  "catalan"+i, "catalan("+i+")", list_name); }
 	
 	return catalan_list;
 }
 
-function make_pow_2_x_list() {
+function make_pow_2_x_list(list_name) {
 	var pow_2_x_list = [];
 	count = 0;
 	
-	for (var i=35; i<=41; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_ms, "pow_2_"+i,"2^"+i); }
-	for (var i=25; i<=31; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_s, "pow_2_"+i,"2^"+i); }
-	for (var i=20; i<=26; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_min, "pow_2_"+i,"2^"+i); }
-	for (var i=14; i<=20; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_hr, "pow_2_"+i,"2^"+i); }
-	for (var i=9; i<=15; i++)  { addto_master(pow_2_x_list, Math.pow(2,i), ms_dy, "pow_2_"+i,"2^"+i); }
+	for (var i=35; i<=41; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_ms,  "pow2_"+i, "2^"+i, list_name); }
+	for (var i=25; i<=31; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_s,   "pow2_"+i, "2^"+i, list_name); }
+	for (var i=20; i<=26; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_min, "pow2_"+i, "2^"+i, list_name); }
+	for (var i=14; i<=20; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_hr,  "pow2_"+i, "2^"+i, list_name); }
+	for (var i=9; i<=15; i++)  { addto_master(pow_2_x_list, Math.pow(2,i), ms_dy,  "pow2_"+i, "2^"+i, list_name); }
 
 	return pow_2_x_list;
 }
 
-function make_digits_list() {
+function make_digits_list(list_name) {
 	var digits_list = [];
 	count = 0;
-	addto_master(digits_list, 123456789, ms_s, "n_123456789", "123,456,789");
-	addto_master(digits_list, 1234567890, ms_s, "n_1234567890", "1,234,567,890");
-	addto_master(digits_list, 987654321, ms_s, "n_987654321", "987,654,321");
+	addto_master(digits_list, 123456789,  ms_s, "n_123456789",  "123,456,789",   list_name);
+	addto_master(digits_list, 1234567890, ms_s, "n_1234567890", "1,234,567,890", list_name);
+	addto_master(digits_list, 987654321,  ms_s, "n_987654321",  "987,654,321",   list_name);
 
 	return digits_list;
 }
 
-function make_pow_10_x_list() {
+function make_pow_10_x_list(list_name) {
 	var pow_10_x_list = [];
 	count = 0;
-	addto_master(pow_10_x_list, Math.pow(10,8), ms_s, "pow_10_8","100 million");
-	addto_master(pow_10_x_list, Math.pow(10,9), ms_s, "pow_10_9","1 billion");
-	addto_master(pow_10_x_list, Math.pow(10,6), ms_min, "pow_10_6","1 million");
-	addto_master(pow_10_x_list, Math.pow(10,7), ms_min, "pow_10_7","10 million");  
-	addto_master(pow_10_x_list, Math.pow(10,4), ms_hr, "pow_10_4","10 thousand");
-	addto_master(pow_10_x_list, Math.pow(10,5), ms_hr, "pow_10_5","100 thousand");
-	addto_master(pow_10_x_list, Math.pow(10,6), ms_hr, "pow_10_6","1 million");
-	addto_master(pow_10_x_list, Math.pow(10,3), ms_dy, "pow_10_3","1 thousand");         
-	addto_master(pow_10_x_list, Math.pow(10,4), ms_dy, "pow_10_4","10 thousand");
+
+	addto_master(pow_10_x_list, Math.pow(10,8), ms_s,   list_name+"8", "100 million",  list_name);
+	addto_master(pow_10_x_list, Math.pow(10,9), ms_s,   list_name+"9", "1 billion",    list_name);
+	addto_master(pow_10_x_list, Math.pow(10,6), ms_min, list_name+"6", "1 million",    list_name);
+	addto_master(pow_10_x_list, Math.pow(10,7), ms_min, list_name+"7", "10 million",   list_name);  
+	addto_master(pow_10_x_list, Math.pow(10,4), ms_hr,  list_name+"4", "10 thousand",  list_name);
+	addto_master(pow_10_x_list, Math.pow(10,5), ms_hr,  list_name+"5", "100 thousand", list_name);
+	addto_master(pow_10_x_list, Math.pow(10,6), ms_hr,  list_name+"6", "1 million",    list_name);
+	addto_master(pow_10_x_list, Math.pow(10,3), ms_dy,  list_name+"3", "1 thousand",   list_name);         
+	addto_master(pow_10_x_list, Math.pow(10,4), ms_dy,  list_name+"4", "10 thousand",  list_name);
 
 	return pow_10_x_list;
 }
 
-function make_fibonacci_list() {
+function make_fibonacci_list(list_name) {
 	var fibonacci_list = [];
 	count = 0;
 
-	for (var i=52; i<=62; i++) { addto_master(fibonacci_list, fibonacci[i], ms_ms, "fib_"+i, "fibonacci("+i+")"); }
-	for (var i=38; i<=47; i++) { addto_master(fibonacci_list, fibonacci[i], ms_s, "fib_"+i, "fibonacci("+i+")"); }
-	for (var i=30; i<=39; i++) { addto_master(fibonacci_list, fibonacci[i], ms_min, "fib_"+i, "fibonacci("+i+")"); }
-	for (var i=21; i<=30; i++) { addto_master(fibonacci_list, fibonacci[i], ms_hr, "fib_"+i, "fibonacci("+i+")"); }
-	for (var i=14; i<=24; i++) { addto_master(fibonacci_list, fibonacci[i], ms_dy, "fib_"+i, "fibonacci("+i+")"); }
+	for (var i=52; i<=62; i++) { addto_master(fibonacci_list, fibonacci[i], ms_ms,  list_name+i, list_name+"("+i+")", list_name); }
+	for (var i=38; i<=47; i++) { addto_master(fibonacci_list, fibonacci[i], ms_s,   list_name+i, list_name+"("+i+")", list_name); }
+	for (var i=30; i<=39; i++) { addto_master(fibonacci_list, fibonacci[i], ms_min, list_name+i, list_name+"("+i+")", list_name); }
+	for (var i=21; i<=30; i++) { addto_master(fibonacci_list, fibonacci[i], ms_hr,  list_name+i, list_name+"("+i+")", list_name); }
+	for (var i=14; i<=24; i++) { addto_master(fibonacci_list, fibonacci[i], ms_dy,  list_name+i, list_name+"("+i+")", list_name); }
 
 	return fibonacci_list;
 }
 
-function make_factorials_list() {
+function make_factorials_list(list_name) {
 	var factorials_list = [];
 	count = 0;
 	
-	for (var i=14; i<=15; i++) { addto_master(factorials_list, factorials[i], ms_ms, "fact"+i, i+"!"); }
-	for (var i=11; i<=12; i++) { addto_master(factorials_list, factorials[i], ms_s, "fact"+i, i+"!"); }
-	for (var i=10; i<=11; i++) { addto_master(factorials_list, factorials[i], ms_min, "fact"+i, i+"!"); }
-	for (var i=8; i<=9; i++) { addto_master(factorials_list, factorials[i], ms_hr, "fact"+i, i+"!"); }
-	for (var i=6; i<=8; i++) { addto_master(factorials_list, factorials[i], ms_dy, "fact"+i, i+"!"); }	
+	for (var i=14; i<=15; i++) { addto_master(factorials_list, factorials[i], ms_ms,  list_name+i, i+"!", list_name); }
+	for (var i=11; i<=12; i++) { addto_master(factorials_list, factorials[i], ms_s,   list_name+i, i+"!", list_name); }
+	for (var i=10; i<=11; i++) { addto_master(factorials_list, factorials[i], ms_min, list_name+i, i+"!", list_name); }
+	for (var i=8; i<=9; i++)   { addto_master(factorials_list, factorials[i], ms_hr,  list_name+i, i+"!", list_name); }
+	for (var i=6; i<=8; i++)   { addto_master(factorials_list, factorials[i], ms_dy,  list_name+i, i+"!", list_name); }	
 
 	return factorials_list;
 }
 
-function make_primes_list() {
+function make_primes_list(list_name) {
 	var primes_list = [];
 	count = 0;
 	
-	for (var i=7; i<=8; i++) { addto_master(primes_list, primes["10^"+i], ms_s, "prime_10_"+i,"prime(10^"+i+")"); }
-	for (var i=5; i<=6; i++) { addto_master(primes_list, primes["10^"+i], ms_min, "prime_10_"+i,"prime(10^"+i+")"); }
-	for (var i=4; i<=4; i++) { addto_master(primes_list, primes["10^"+i], ms_hr, "prime_10_"+i,"prime(10^"+i+")"); }
+	for (var i=7; i<=8; i++) { addto_master(primes_list, primes["10^"+i], ms_s,   list_name+i, "prime(10^"+i+")", list_name); }
+	for (var i=5; i<=6; i++) { addto_master(primes_list, primes["10^"+i], ms_min, list_name+i, "prime(10^"+i+")", list_name); }
+	for (var i=4; i<=4; i++) { addto_master(primes_list, primes["10^"+i], ms_hr,  list_name+i, "prime(10^"+i+")", list_name); }
 
 	return primes_list;
 }
 
-function make_fermat_list() {
+function make_fermat_list(list_name) {
 	var fermat_list = [];
 	count = 0;
-	addto_master(fermat_list, fermat[5], ms_hr, "fermat_5","fermat(5)");
+
+	var i = 5;
+	addto_master(fermat_list, fermat[i], ms_hr, list_name+i, list_name+"("+i+")", list_name);
 
 	return fermat_list;
 }
 
-function make_mersenne_list() {
+function make_mersenne_list(list_name) {
 	var mersenne_list = [];
 	count = 0;
-	addto_master(mersenne_list, mersenne[8], ms_s, "mersenne_8","mersenne(8)");
+
+	var i=8;
+	addto_master(mersenne_list, mersenne[i], ms_s, list_name+i, list_name+"("+i+")", list_name);
 
 	return mersenne_list;
 }
 
+/* Inexplicably, these are all totally wrong ... I got it from
+http://nssdc.gsfc.nasa.gov/planetary/factsheet/index.html 
+but it doesn't correlate with wikipedia at all .... must look into this. */
+var mercury_day_in_hours = 4222.6;
+var venus_synodic_period_in_days = 583.92; // From http://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html
+
+var earth_day_in_hours = 24.0;
+var moon_day_in_hours = 708.7;
+var mars_day_in_hours = 24.7;
+var jupiter_day_in_hours = 9.9;
+var saturn_day_in_hours = 10.7;
+var uranus_day_in_hours = 17.2;
+var neptune_day_in_hours = 16.1;
+var pluto_day_in_hours = 153.3;
+
+function make_planet_list(list_name) {
+	var planet_list = [];
+	count = 0;
+
+	for (var i=1; i<=26; i++) {
+		addto_master_planet(planet_list, mercury_day_in_hours*10*i, ms_hr, "mercury_days_"+(10*i), (10*i)+" mercury days", list_name); }
+	for (var i=1; i<=16; i++) {
+		addto_master_planet(planet_list, venus_synodic_period_in_days*(i*5), ms_dy, "venus_days_"+(5*i), (5*i)+" venus days", list_name); }
+	for (var i=1; i<=16; i++) {
+		addto_master_planet(planet_list, moon_day_in_hours*100*i, ms_hr, "moon_days_"+(100*i), (100*i)+" moon days", list_name); }
+	for (var i=1; i<=23; i++) {
+		addto_master_planet(planet_list, mars_day_in_hours*2000*i, ms_hr, "mars_days_"+(2000*i), (2000*i)+" mars days", list_name); }
+	for (var i=1; i<=23; i++) {
+		addto_master_planet(planet_list, jupiter_day_in_hours*5000*i, ms_hr, "jupiter_days_"+(5000*i), (5000*i)+" jupiter days", list_name); }
+	for (var i=1; i<=21; i++) {
+		addto_master_planet(planet_list, saturn_day_in_hours*5000*i, ms_hr, "saturn_days_"+(5000*i), (5000*i)+" saturn days", list_name); }
+	for (var i=1; i<=13; i++) { 
+		addto_master_planet(planet_list, uranus_day_in_hours*5000*i, ms_hr, "uranus_days_"+(5000*i), (5000*i)+" uranus days", list_name); }
+	for (var i=1; i<=14; i++) { 
+		addto_master_planet(planet_list, neptune_day_in_hours*5000*i, ms_hr, "neptune_days_"+(5000*i), (5000*i)+" neptune days", list_name); }
+	for (var i=1; i<=14; i++) { 
+		addto_master_planet(planet_list, pluto_day_in_hours*500*i, ms_hr, "pluto_days_"+(500*i), (500*i)+" pluto days", list_name); }
+
+	return planet_list;
+}
+
+
 var master_list = [];
+var repunit_list = [];
+var bell_list = [];
+var catalan_list = [];
+var pow_2_x_list = [];
+var digits_list = [];
+var pow_10_x_list = [];
+var fibonacci_list = [];
+var factorials_list = [];
+var primes_list = [];
+var fermat_list = [];
+var mersenne_list = [];
+var planet_list = [];
+
 
 function initialize_table() {	
 	
-	var repunit_list = make_repunit_list();
-	var bell_list = make_bell_list();
-	var catalan_list = make_catalan_list();
-	var pow_2_x_list = make_pow_2_x_list();
-	var digits_list = make_digits_list();
-	var pow_10_x_list = make_pow_10_x_list();
-	var fibonacci_list = make_fibonacci_list();
-	var factorials_list = make_factorials_list();
-	var primes_list = make_primes_list();
-	var fermat_list = make_fermat_list();
-	var mersenne_list = make_mersenne_list();
+	repunit_list = make_repunit_list("repunit");
+	bell_list = make_bell_list("bell");
+	catalan_list = make_catalan_list("catalan");
+	pow_2_x_list = make_pow_2_x_list("pow2_");
+	digits_list = make_digits_list("digits");
+	pow_10_x_list = make_pow_10_x_list("pow10_");
+	fibonacci_list = make_fibonacci_list("fibonacci");
+	factorials_list = make_factorials_list("factorial");
+	primes_list = make_primes_list("prime10_");
+	fermat_list = make_fermat_list("fermat");
+	mersenne_list = make_mersenne_list("mersenne");
+	planet_list = make_planet_list("planet");
 
 	master_list = master_list.concat(repunit_list);
 	master_list = master_list.concat(bell_list);
@@ -634,6 +735,7 @@ function initialize_table() {
 	master_list = master_list.concat(primes_list);
 	master_list = master_list.concat(fermat_list);
 	master_list = master_list.concat(mersenne_list);
+	master_list = master_list.concat(planet_list);
 
 	master_list.sort(function(a,b) {
 		return (b.number*b.factor) - (a.number*a.factor);
@@ -652,6 +754,16 @@ function processJSON(data) {
 	}
 }
 
+function hideshow(button, list_name) {
+	if (!button.hasClass('show')) {
+		button.addClass('show');
+		showList(list_name);
+	} else {
+		button.removeClass('show');
+		hideList(list_name);
+	}
+}
+
 $(document).ready(function() {
 	$.each(monthList, function(key,value){
 		$('#month').append('<option value='+value+'>'+key+'</option>');
@@ -659,6 +771,23 @@ $(document).ready(function() {
 	$.each(dayList, function(key,value){
 		$('#day').append('<option value='+value+'>'+value+'</option>');
 	});
+
+
+/* This next function was copy-pasted from 
+http://stackoverflow.com/questions/3797193/best-way-to-code-a-big-one-click-toggle-button-to-replace-a-single-checkbox-and
+*/
+	$("#factorial").click( function(event) { hideshow($(event.currentTarget), "factorial"); });
+	$("#repunit").click( function(event) { hideshow($(event.currentTarget), "repunit"); });
+	$("#bell").click( function(event) { hideshow($(event.currentTarget), "bell"); });
+	$("#fibonacci").click( function(event) { hideshow($(event.currentTarget), "fibonacci"); });
+	$("#catalan").click( function(event) { hideshow($(event.currentTarget), "catalan"); });
+	$("#pow2_").click( function(event) { hideshow($(event.currentTarget), "pow2_"); });
+	$("#pow10_").click( function(event) { hideshow($(event.currentTarget), "pow10_"); });
+	$("#planet").click( function(event) { hideshow($(event.currentTarget), "planet"); });
+	$("#primes").click( function(event) { hideshow($(event.currentTarget), "prime10_"); });
+	$("#fermat").click( function(event) { hideshow($(event.currentTarget), "fermat"); });
+	$("#mersenne").click( function(event) { hideshow($(event.currentTarget), "mersenne"); });
+	$("#digits").click( function(event) { hideshow($(event.currentTarget), "digits"); });
 
 	initialize_table();
 

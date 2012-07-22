@@ -2,6 +2,12 @@ body {
   font-family: Verdana, Geneva, sans-serif;
   font-size: 12px; }
 
+button {
+  background: #def; }
+
+button.show {
+  background: #9af; }
+
 .item, .header {
   background: #cdf;
   width: 520px; }
