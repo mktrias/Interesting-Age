@@ -1,0 +1,72 @@
+body {
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 12px; }
+
+.item, .header {
+  background: #cdf;
+  width: 520px; }
+
+.time, .date, .age {
+  display: inline;
+  margin-right: 0px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  float: left;
+  height: 18px; }
+
+.time {
+  clear: left;
+  margin-left: 0px;
+  width: 160px; }
+
+.date {
+  width: 154px; }
+
+.age {
+  width: 170px; }
+
+.header .time,
+.header .date,
+.header .age {
+  background: #fff; }
+
+.item.age1 .time, .item.age1 .date, .item.age1 .age {
+  background: #f28c8c; }
+
+.item.age10 .time, .item.age10 .date, .item.age10 .age {
+  background: #f2ae8c; }
+
+.item.age20 .time, .item.age20 .date, .item.age20 .age {
+  background: #f2d08c; }
+
+.item.age30 .time, .item.age30 .date, .item.age30 .age {
+  background: #f2f28c; }
+
+.item.age40 .time, .item.age40 .date, .item.age40 .age {
+  background: #d0f28c; }
+
+.item.age50 .time, .item.age50 .date, .item.age50 .age {
+  background: #aef28c; }
+
+.item.age60 .time, .item.age60 .date, .item.age60 .age {
+  background: #8cf28c; }
+
+.item.age70 .time, .item.age70 .date, .item.age70 .age {
+  background: #8cf2ae; }
+
+.item.age80 .time, .item.age80 .date, .item.age80 .age {
+  background: #8cf2d0; }
+
+.item.age90 .time, .item.age90 .date, .item.age90 .age {
+  background: #8cf2f2; }
+
+.item.age100 .time, .item.age100 .date, .item.age100 .age {
+  background: #8cd0f2; }
+
+.item.age110 .time, .item.age110 .date, .item.age110 .age {
+  background: #8caef2; }
+
+.item.age120 .time, .item.age120 .date, .item.age120 .age {
+  background: #8c8cf2; }

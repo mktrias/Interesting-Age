@@ -1,0 +1,63 @@
+body {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 12px;
+}
+
+
+.item, .header {
+	background: #cdf;
+	width: 520px;
+}
+
+.time, .date, .age {
+	display: inline;
+	margin-right: 0px;
+	padding: {
+		left: 4px;
+		right: 4px;
+		top: 1px;
+		bottom: 1px;
+	}
+	float: left;
+	height: 18px;
+}
+
+.time {
+	clear: left;
+	margin-left: 0px;
+	width: 160px;
+}
+
+.date {
+	width: 154px;
+}
+
+.age {
+	width: 170px;
+
+}
+
+.header .time,
+.header .date,
+.header .age {
+	background: #fff;
+}
+
+$bg_light: 75%;
+$bg_sat: 80%;
+
+$i : 1;
+
+.item.age#{$i} {
+	.time, .date, .age {
+		background: hsl(0, $bg_sat, $bg_light);
+	}
+}
+
+@for $i from 1 through 12 {
+	.item.age#{10 * $i} {
+		.time, .date, .age {
+			background: hsl($i*20, $bg_sat, $bg_light);
+		}
+	}
+}

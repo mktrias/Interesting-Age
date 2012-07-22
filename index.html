@@ -1,0 +1,683 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+<!-- thanks to malsup.github.com/form -->
+<script src="jquery.form.js"></script> 
+
+<!-- thanks to datejs.com -->
+<script type="text/javascript" src="date.js"></script>
+<link rel="stylesheet" type="text/css" href="main.css" />
+</head>
+
+<body>
+
+<h1>Interesting</h1>
+
+<p id="#form-message"></p>
+<form id="birthday" action="json-echo.php" method="GET">
+Enter your Birthday:<br>
+Year: <input type="text" name="year" value="" />
+Month: 
+<select name="month" id="month">
+</select>
+Day: <select name="day" id="day">
+</select> <br>
+<input type="submit" value="Submit" />
+</form>
+
+<div id="allresults">
+
+	<div class="header">
+		<div class="time">Length of time</div>
+		<div class="date">Time and Date</div>
+		<div class="age">Age (approx)</div>
+	</div>
+
+</div>
+
+
+<script>
+
+var master_count = 0;
+
+var bell = {
+	0 : 1, 
+	1 : 1, 
+	2 : 2, 
+	3 : 5, 
+	4 : 15, 
+	5 : 52, 
+	6 : 203, 
+	7 : 877, 
+	8 : 4140, 
+	9 : 21147, 
+	10 : 115975,
+	11 : 678570,
+	12 : 4213597,
+	13 : 27644437,
+	14 : 190899322,
+	15 : 1382958545,
+	16 : 10480142147,
+	17 : 82864869804,
+	18 : 682076806159,
+	19 : 5832742205057,
+	20 : 51724158235372,
+	21 : 474869816156751,
+	22 : 4506715738447323,
+	23 : 44152005855084346,
+	24 : 445958869294805289,
+	25 : 4638590332229999353,
+	26 : 49631246523618756274
+}
+
+var catalan = {
+	0 : 1,
+	1 : 1,
+	2 : 2,
+	3 : 5,
+	4 : 14,
+	5 : 42,
+	6 : 132,
+	7 : 429,
+	8 : 1430,
+	9 : 4862,
+	10 : 16796,
+	11 : 58786,
+	12 : 208012,
+	13 : 742900,
+	14 : 2674440,
+	15 : 9694845,
+	16 : 35357670,
+	17 : 129644790,
+	18 : 477638700,
+	19 : 1767263190,
+	20 : 6564120420,
+	21 : 24466267020,
+	22 : 91482563640,
+	23 : 343059613650,
+	24 : 1289904147324,
+	25 : 4861946401452,
+	26 : 18367353072152,
+	27 : 69533550916004,
+	28 : 263747951750360,
+	29 : 1002242216651368,
+	30 : 3814986502092304
+}
+
+var fermat = {
+	1 : 3,
+	2 : 5,
+	3 : 17,
+	4 : 257,
+	5 : 65537,
+	6 : 4294967297,
+	7 : 18446744073709551617
+}
+
+var repunit = {
+	1 :  1,
+	2 :  11,
+	3 :  111,
+	4 :  1111,
+	5 :  11111,
+	6 :  111111,
+	7 :  1111111,
+	8 :  11111111,
+	9 :  111111111,
+	10 : 1111111111,
+	11 : 11111111111
+}
+
+var factorials = {
+	1 : 1,
+	2 : 2,
+	3 : 6,
+	4 : 24,
+	5 : 120,
+	6 : 720,
+	7 : 5040,
+	8 : 40320,
+	9 : 362880,
+	10: 3628800,
+	11: 39916800,
+	12: 479001600,
+	13: 6227020800,
+	14: 87178291200,
+	15: 1307674368000
+}
+	
+var fibonacci = {
+	0 :0,
+	1 :1,
+	2 :1,
+	3 :2,
+	4 :3,
+	5 :5,
+	6 :8,
+	7 :13,
+	8 :21,
+	9 :34,
+	10 : 55,
+	11 : 89,
+	12 : 144,
+	13 : 233,
+	14 : 377,
+	15 : 610,
+	16 : 987,
+	17 : 1597,
+	18 : 2584,
+	19 : 4181,
+	20 : 6765,
+	21 : 10946,
+	22 : 17711,
+	23 : 28657,
+	24 : 46368,
+	25 : 75025,
+	26 : 121393,
+	27 : 196418,
+	28 : 317811,
+	29 : 514229,
+	30 : 832040,
+	31 : 1346269,
+	32 : 2178309,
+	33 : 3524578,
+	34 : 5702887,
+	35 : 9227465,
+	36 : 14930352,
+	37 : 24157817,
+	38 : 39088169,
+	39 : 63245986,
+	40 : 102334155,
+	41 : 165580141,
+	42 : 267914296,
+	43 : 433494437,
+	44 : 701408733,
+	45 : 1134903170,
+	46 : 1836311903,
+	47 : 2971215073,
+	48 : 4807526976,
+	49 : 7778742049,
+	50 : 12586269025,
+	51 : 20365011074,
+	52 : 32951280099,
+	53 : 53316291173,
+	54 : 86267571272,
+	55 : 139583862445,
+	56 : 225851433717,
+	57 : 365435296162,
+	58 : 591286729879,
+	59 : 956722026041,
+	60 : 1548008755920,
+	61 : 2504730781961,
+	62 : 4052739537881,
+	63 : 6557470319842,
+	64 : 10610209857723,
+	65 : 17167680177565,
+	66 : 27777890035288,
+	67 : 44945570212853,
+	68 : 72723460248141,
+	69 : 117669030460994,
+	70 : 190392490709135,
+	71 : 308061521170129,
+	72 : 498454011879264,
+	73 : 806515533049393,
+	74 : 1304969544928657,
+	75 : 2111485077978050,
+	76 : 3416454622906707,
+	77 : 5527939700884757,
+	78 : 8944394323791464,
+	79 : 14472334024676221,
+	80 : 23416728348467685,
+	81 : 37889062373143906,
+	82 : 61305790721611591,
+	83 : 99194853094755497,
+	84 : 160500643816367088,
+	85 : 259695496911122585,
+	86 : 420196140727489673,
+	87 : 679891637638612258,
+	88 : 1100087778366101931,
+	89 : 1779979416004714189,
+	90 : 2880067194370816120,
+	91 : 4660046610375530309,
+	92 : 7540113804746346429,
+	93 : 12200160415121876738,
+	94 : 19740274219868223167,
+	95 : 31940434634990099905,
+	96 : 51680708854858323072,
+	97 : 83621143489848422977,
+	98 : 135301852344706746049,
+	99 : 218922995834555169026,
+	100 : 354224848179261915075
+}
+
+var primes = {
+	"10^1" : 29,
+	"10^2" : 541,
+	"10^3" : 7919,
+	"10^4" : 104729,
+	"10^5" : 1299709,
+	"10^6" : 15485863,
+	"10^7" : 179424673,
+	"10^8" : 2038074743,
+	"10^9" : 22801763489	
+}
+
+var mersenne = {
+	1 : 3,
+	2 : 7,
+	3 : 31,
+	4 : 127,
+	5 : 8191,
+	6 : 131071,
+	7 : 524287,
+	8 : 2147483647,
+	9 : 2305843009213693951
+}
+
+var monthList = {
+	"January" : 0,
+	"February" : 1,
+	"March" : 2,
+	"April" : 3,
+	"May" : 4,
+	"June" : 5,
+	"July" : 6,
+	"August" : 7,
+	"September" : 8,
+	"October" : 9,
+	"November" : 10,
+	"December" : 11
+};
+
+var dayList = [];
+for(i=1;i<=31;i++) {
+	dayList.push(i);
+};
+
+function validate(formData, jqForm, options) {
+	if (!formData[0].value) {
+		alert('Please enter a year');
+		return false;
+	}
+	
+	var queryString = $.param(formData);
+	
+	var y = Number(formData[0].value);
+	var m = Number(formData[1].value);
+	var d = Number(formData[2].value);
+	
+	try {
+		Date.validateYear(y);
+	} catch(e) {
+		alert('Year must be a number from 0 to 9999');
+		return false;
+	}
+	
+	try {
+		Date.validateDay(d,y,m);
+	} catch (e) {
+		alert('That date does not exist.');
+		return false;
+	}
+}
+
+
+function addAge(milliseconds, element) {
+	var dom = $(".age."+element);
+	var plural = "s";
+	
+	if (milliseconds < 1000) {
+		dom.html(milliseconds+" milliseconds");
+		return 0;
+	} else {
+		var sec = milliseconds / 1000;
+		if (sec < 60) {
+			var sec_round = Math.round(sec);
+			if (sec_round == 1) { plural = "" };
+			dom.html(sec_round+" second"+plural);
+			return 0;
+		} else {
+			var min = sec / 60;
+			if (min < 60) {
+				var min_round = Math.round(min);
+				if (min_round == 1) { plural = "" };
+				dom.html(min_round+" minute"+plural);
+				return 0;
+			} else {
+				var hr = min / 60;
+				if (hr < 24) {
+					var hr_round = Math.round(hr);
+					if (hr_round == 1) { plural = "" };
+					dom.html(hr_round+" hour"+plural);
+					return 0;
+				} else {
+					var dy = hr / 24;
+					if (dy < 7) {
+						var dy_round = Math.round(dy);
+						if (dy_round == 1) { plural = "" };
+						dom.html(dy_round+" day"+plural);
+						return 0;
+					} else {
+						var wk = dy / 7;
+						var yr = dy / 365.2425;
+						var mo = yr * 12;
+						if (wk < 4) {
+							var wk_round = Math.round(wk);
+							if (wk_round == 1) { plural = "" };
+							dom.html(wk_round+" week"+plural);
+							return 0;
+						} else {
+							if (mo < 12) {
+								var mo_round = Math.round(mo);
+								if (mo_round == 1) { plural = "" };
+								dom.html(mo_round+" month"+plural);
+								return 0;
+							} else {
+								var mo_str = "";
+								var dy_str = "";
+								var yr_round = Math.floor(yr);
+								var mo_rem = Math.floor(12*(yr - yr_round));
+								var day_rem = Math.floor(365*(yr - yr_round - mo_rem/12));
+								
+								if (yr_round == 1) { plural = "" };
+								
+								if (mo_rem == 1 ) {
+									mo_str = mo_rem+" mo ";
+								} else if (mo_rem > 1) {
+									mo_str = mo_rem+" mos ";
+								}
+								
+								if (day_rem == 1) {
+									dy_str = day_rem+" day";
+								} else if (day_rem > 1) {
+									dy_str = day_rem+" days";
+								}
+									
+								dom.html(yr_round+" year"+plural+" "+mo_str+dy_str);
+								
+								return yr_round;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+function add_Row(bday, array) {
+
+	var elem = array["element"];
+	var lab = array["label"];
+	var unit = array["unit"];
+	var number = array["number"];
+	var factor = array["factor"];
+
+	var dayclone = bday.clone();
+	dayclone.addMilliseconds(number*factor);
+	var date = dayclone.toString("hh:MM MMM d, yyyy");
+
+	$("#allresults").append("<div class=\"item "+elem+"\"></div>");
+		$(".item."+elem).append("<div class=\"time\">"+lab+" "+unit+"</div>");
+		$(".item."+elem).append("<div class=\"date "+elem+"\">"+date+"</div>");
+		$(".item."+elem).append("<div class=\"age "+elem+"\"></div>");
+
+	var myage = addAge(number*factor, elem);
+
+	var ageclass = 10*Math.floor(myage / 10);
+	if (ageclass == 0) {
+		ageclass = myage *10;
+	};
+	$(".item."+elem).addClass("age"+ageclass);
+}
+
+function addto_master(array, number, factor, element, label) {
+
+	var unit = "";
+	if (factor == 1) {
+		unit = "msec";
+	} else if (factor == 1000) {
+		unit = "sec";
+	} else if (factor == 1000*60) {
+		unit = "min";
+	} else if (factor == 1000*60*60) {
+		unit = "hour";
+	} else if (factor == 1000*60*60*24) {
+		unit = "day";
+	}
+
+	array[master_count] = [];
+	array[master_count]["number"] = number;
+	array[master_count]["factor"] = factor;
+	array[master_count]["element"] = element+unit;
+	array[master_count]["label"] = label;
+	array[master_count]["unit"] = unit;
+
+	master_count++;
+
+}
+
+function processJSON(data) {	
+	var bday = new Date(data.year, data.month, data.day);
+
+	var ms_ms = 1;
+	var ms_s = 1000;
+	var ms_min = 1000*60;
+	var ms_hr = 1000*60*60;
+	var ms_dy = 1000*60*60*24;
+
+	var list = [];
+	
+	addto_master(list, repunit[9], ms_s, "repunit_9", "repunit(9)");
+	addto_master(list, repunit[10], ms_s, "repunit_10", "repunit(10)");
+	addto_master(list, repunit[7], ms_min, "repunit_7", "repunit(7)");
+	addto_master(list, repunit[8], ms_min, "repunit_8", "repunit(8)");
+	addto_master(list, repunit[5], ms_hr, "repunit_5", "repunit(5)");
+	addto_master(list, repunit[6], ms_hr, "repunit_6", "repunit(6)");
+	addto_master(list, repunit[7], ms_hr, "repunit_7", "repunit(7)");
+	addto_master(list, repunit[4], ms_dy, "repunit_4", "repunit(4)");	
+	addto_master(list, repunit[5], ms_dy, "repunit_5", "repunit(5)");
+
+
+	addto_master(list, bell[17], ms_ms, "bell_17","bell(17)");
+	addto_master(list, bell[18], ms_ms, "bell_18","bell(18)");
+	addto_master(list, bell[14], ms_s, "bell_14","bell(14)");
+	addto_master(list, bell[15], ms_s, "bell_15","bell(15)");
+	addto_master(list, bell[11], ms_min, "bell_11","bell(11)");
+	addto_master(list, bell[12], ms_min, "bell_12","bell(12)");
+	addto_master(list, bell[13], ms_min, "bell_13","bell(13)");
+	addto_master(list, bell[9], ms_hr, "bell_9","bell(9)");
+	addto_master(list, bell[10], ms_hr, "bell_10","bell(10)");
+	addto_master(list, bell[11], ms_hr, "bell_11","bell(11)");
+	addto_master(list, bell[7], ms_dy, "bell_7","bell(7)");
+	addto_master(list, bell[8], ms_dy, "bell_8","bell(8)");
+	addto_master(list, bell[9], ms_dy, "bell_9","bell(9)");
+
+	addto_master(list, catalan[22], ms_ms, "catalan_22","catalan(22)");
+	addto_master(list, catalan[23], ms_ms, "catalan_23","catalan(23)");
+	addto_master(list, catalan[24], ms_ms, "catalan_24","catalan(24)");
+	addto_master(list, catalan[16], ms_s, "catalan_16","catalan(16)");
+	addto_master(list, catalan[17], ms_s, "catalan_17","catalan(17)");
+	addto_master(list, catalan[18], ms_s, "catalan_18","catalan(18)");	
+	addto_master(list, catalan[19], ms_s, "catalan_19","catalan(19)");
+	addto_master(list, catalan[13], ms_min, "catalan_13","catalan(13)");
+	addto_master(list, catalan[14], ms_min, "catalan_14","catalan(14)");
+	addto_master(list, catalan[15], ms_min, "catalan_15","catalan(15)");
+	addto_master(list, catalan[16], ms_min, "catalan_16","catalan(16)");
+	addto_master(list, catalan[10], ms_hr, "catalan_10", "catalan(10)");
+	addto_master(list, catalan[11], ms_hr, "catalan_11", "catalan(11)");
+	addto_master(list, catalan[12], ms_hr, "catalan_12", "catalan(12)");
+	addto_master(list, catalan[13], ms_hr, "catalan_13", "catalan(13)");
+	addto_master(list, catalan[7], ms_dy, "catalan_7","catalan(7)");
+	addto_master(list, catalan[8], ms_dy, "catalan_8","catalan(8)");
+	addto_master(list, catalan[9], ms_dy, "catalan_9","catalan(9)");
+	addto_master(list, catalan[10], ms_dy, "catalan_10","catalan(10)");
+	
+
+
+	addto_master(list, Math.pow(2,35), ms_ms,"pow_2_35","2^35");
+	addto_master(list, Math.pow(2,36), ms_ms,"pow_2_36","2^36");
+	addto_master(list, Math.pow(2,37), ms_ms,"pow_2_37","2^37");
+	addto_master(list, Math.pow(2,38), ms_ms,"pow_2_38","2^38");
+	addto_master(list, Math.pow(2,39), ms_ms,"pow_2_39","2^39");
+	addto_master(list, Math.pow(2,40), ms_ms,"pow_2_40","2^40");
+	addto_master(list, Math.pow(2,41), ms_ms,"pow_2_41","2^41");
+	addto_master(list, Math.pow(2,25), ms_s, "pow_2_25","2^25");
+	addto_master(list, Math.pow(2,26), ms_s, "pow_2_26","2^26");
+	addto_master(list, Math.pow(2,27), ms_s, "pow_2_27","2^27");
+	addto_master(list, Math.pow(2,28), ms_s, "pow_2_28","2^28");
+	addto_master(list, Math.pow(2,29), ms_s, "pow_2_29","2^29");
+	addto_master(list, Math.pow(2,30), ms_s, "pow_2_30","2^30");
+	addto_master(list, Math.pow(2,31), ms_s, "pow_2_31","2^31");
+	addto_master(list, Math.pow(2,20), ms_min, "pow_2_4","2^20");
+	addto_master(list, Math.pow(2,21), ms_min, "pow_2_5","2^21");
+	addto_master(list, Math.pow(2,22), ms_min, "pow_2_6","2^22");
+	addto_master(list, Math.pow(2,23), ms_min, "pow_2_7","2^23");
+	addto_master(list, Math.pow(2,24), ms_min, "pow_2_8","2^24"); 
+	addto_master(list, Math.pow(2,25), ms_min, "pow_2_9","2^25");
+	addto_master(list, Math.pow(2,26), ms_min, "pow_2_10","2^26");
+	addto_master(list, Math.pow(2,14), ms_hr, "pow_2_14","2^14");
+	addto_master(list, Math.pow(2,15), ms_hr, "pow_2_15","2^15");
+	addto_master(list, Math.pow(2,16), ms_hr, "pow_2_16","2^16");
+	addto_master(list, Math.pow(2,17), ms_hr, "pow_2_17","2^17");
+	addto_master(list, Math.pow(2,18), ms_hr, "pow_2_18","2^18"); 
+	addto_master(list, Math.pow(2,19), ms_hr, "pow_2_19","2^19");
+	addto_master(list, Math.pow(2,20), ms_hr, "pow_2_20","2^20");
+	addto_master(list, Math.pow(2,9), ms_dy, "pow_2_9","2^9");
+	addto_master(list, Math.pow(2,10), ms_dy, "pow_2_10","2^10");
+	addto_master(list, Math.pow(2,11), ms_dy, "pow_2_11","2^11");
+	addto_master(list, Math.pow(2,12), ms_dy, "pow_2_12","2^12");
+	addto_master(list, Math.pow(2,13), ms_dy, "pow_2_13","2^13");
+	addto_master(list, Math.pow(2,14), ms_dy, "pow_2_14","2^14");
+	addto_master(list, Math.pow(2,15), ms_dy, "pow_2_15","2^15");
+	
+	addto_master(list, 123456789, ms_s, "n_123456789", "123,456,789");
+	addto_master(list, 1234567890, ms_s, "n_1234567890", "1,234,567,890");
+	addto_master(list, 987654321, ms_s, "n_987654321", "987,654,321");
+	
+	addto_master(list, Math.pow(10,8), ms_s, "pow_10_8","100 million");
+	addto_master(list, Math.pow(10,9), ms_s, "pow_10_9","1 billion");
+	addto_master(list, Math.pow(10,6), ms_min, "pow_10_6","1 million");
+	addto_master(list, Math.pow(10,7), ms_min, "pow_10_7","10 million");  
+	addto_master(list, Math.pow(10,4), ms_hr, "pow_10_4","10 thousand");
+	addto_master(list, Math.pow(10,5), ms_hr, "pow_10_5","100 thousand");
+	addto_master(list, Math.pow(10,6), ms_hr, "pow_10_6","1 million");
+	addto_master(list, Math.pow(10,3), ms_dy, "pow_10_3","1 thousand");         
+	addto_master(list, Math.pow(10,4), ms_dy, "pow_10_4","10 thousand");
+	
+
+	addto_master(list, fibonacci[52], ms_ms, "fib_52","fibonacci(52)");
+	addto_master(list, fibonacci[53], ms_ms, "fib_53","fibonacci(53)");
+	addto_master(list, fibonacci[54], ms_ms, "fib_54","fibonacci(54)");
+	addto_master(list, fibonacci[55], ms_ms, "fib_55","fibonacci(55)");
+	addto_master(list, fibonacci[56], ms_ms, "fib_56","fibonacci(56)");
+	addto_master(list, fibonacci[57], ms_ms, "fib_57","fibonacci(57)");
+	addto_master(list, fibonacci[58], ms_ms, "fib_58","fibonacci(58)");
+	addto_master(list, fibonacci[59], ms_ms, "fib_59","fibonacci(59)");
+	addto_master(list, fibonacci[60], ms_ms, "fib_60","fibonacci(60)");
+	addto_master(list, fibonacci[61], ms_ms, "fib_61","fibonacci(61)");
+	addto_master(list, fibonacci[62], ms_ms, "fib_62","fibonacci(62)");
+	addto_master(list, fibonacci[38], ms_s, "fib_38","fibonacci(38)");
+	addto_master(list, fibonacci[39], ms_s, "fib_39","fibonacci(39)");
+	addto_master(list, fibonacci[40], ms_s, "fib_40","fibonacci(40)");
+	addto_master(list, fibonacci[41], ms_s, "fib_41","fibonacci(41)");
+	addto_master(list, fibonacci[42], ms_s, "fib_42","fibonacci(42)");
+	addto_master(list, fibonacci[43], ms_s, "fib_43","fibonacci(43)");
+	addto_master(list, fibonacci[44], ms_s, "fib_44","fibonacci(44)");
+	addto_master(list, fibonacci[45], ms_s, "fib_45","fibonacci(45)");
+	addto_master(list, fibonacci[46], ms_s, "fib_46","fibonacci(46)");
+	addto_master(list, fibonacci[47], ms_s, "fib_47","fibonacci(47)");
+	addto_master(list, fibonacci[30], ms_min, "fib_30","fibonacci(30)");
+	addto_master(list, fibonacci[32], ms_min, "fib_32","fibonacci(32)");
+	addto_master(list, fibonacci[31], ms_min, "fib_31","fibonacci(31)");
+	addto_master(list, fibonacci[33], ms_min, "fib_33","fibonacci(33)");
+	addto_master(list, fibonacci[34], ms_min, "fib_34","fibonacci(34)");
+	addto_master(list, fibonacci[35], ms_min, "fib_35","fibonacci(35)");
+	addto_master(list, fibonacci[36], ms_min, "fib_36","fibonacci(36)");
+	addto_master(list, fibonacci[37], ms_min, "fib_37","fibonacci(37)");
+	addto_master(list, fibonacci[38], ms_min, "fib_38","fibonacci(38)");
+	addto_master(list, fibonacci[39], ms_min, "fib_39","fibonacci(39)");
+	addto_master(list, fibonacci[21], ms_hr, "fib_21","fibonacci(21)");
+	addto_master(list, fibonacci[22], ms_hr, "fib_22","fibonacci(22)");
+	addto_master(list, fibonacci[23], ms_hr, "fib_23","fibonacci(23)");
+	addto_master(list, fibonacci[24], ms_hr, "fib_24","fibonacci(24)");
+	addto_master(list, fibonacci[25], ms_hr, "fib_25","fibonacci(25)");
+	addto_master(list, fibonacci[26], ms_hr, "fib_26","fibonacci(26)");
+	addto_master(list, fibonacci[27], ms_hr, "fib_27","fibonacci(27)");
+	addto_master(list, fibonacci[28], ms_hr, "fib_28","fibonacci(28)");
+	addto_master(list, fibonacci[29], ms_hr, "fib_29","fibonacci(29)");
+	addto_master(list, fibonacci[30], ms_hr, "fib_30","fibonacci(30)");
+	addto_master(list, fibonacci[14], ms_dy, "fib_14","fibonacci(14)");
+	addto_master(list, fibonacci[15], ms_dy, "fib_15","fibonacci(15)");
+	addto_master(list, fibonacci[16], ms_dy, "fib_16","fibonacci(16)");
+	addto_master(list, fibonacci[17], ms_dy, "fib_17","fibonacci(17)");
+	addto_master(list, fibonacci[18], ms_dy, "fib_18","fibonacci(18)");
+	addto_master(list, fibonacci[19], ms_dy, "fib_19","fibonacci(19)");
+	addto_master(list, fibonacci[20], ms_dy, "fib_20","fibonacci(20)");
+	addto_master(list, fibonacci[21], ms_dy, "fib_21","fibonacci(21)"); 
+	addto_master(list, fibonacci[22], ms_dy, "fib_22","fibonacci(22)");
+	addto_master(list, fibonacci[23], ms_dy, "fib_23","fibonacci(23)");
+	addto_master(list, fibonacci[24], ms_dy, "fib_24","fibonacci(24)");
+	
+	
+	addto_master(list, factorials[14], ms_ms, "fact14","14!");
+	addto_master(list, factorials[15], ms_ms, "fact15","15!");
+	addto_master(list, factorials[11], ms_s, "fact11","11!");
+	addto_master(list, factorials[12], ms_s, "fact12","12!");
+	addto_master(list, factorials[10], ms_min, "fact10","10!");
+	addto_master(list, factorials[11], ms_min, "fact11","11!");
+	addto_master(list, factorials[8],  ms_hr, "fact8","8!");
+	addto_master(list, factorials[9],  ms_hr, "fact9","9!");
+	addto_master(list, factorials[6], ms_dy, "fact6","6!");
+	addto_master(list, factorials[7], ms_dy, "fact7","7!");
+	addto_master(list, factorials[8], ms_dy, "fact8","8!");
+	
+	
+	addto_master(list, primes["10^7"], ms_s, "prime_10_7","prime(10^7)");
+	addto_master(list, primes["10^8"], ms_s, "prime_10_8","prime(10^8)");
+	addto_master(list, primes["10^5"], ms_min, "prime_10_5","prime(10^5)");
+	addto_master(list, primes["10^6"], ms_min, "prime_10_6","prime(10^6)"); 
+	addto_master(list, primes["10^4"], ms_hr, "prime_10_4","prime(10^4)");
+	
+	
+	addto_master(list, fermat[5], ms_hr, "fermat_5","fermat(5)");
+	
+	addto_master(list, mersenne[8], ms_s, "mersenne_8","mersenne(8)");
+
+
+	list.sort(function(a,b) {
+		return (b.number*b.factor) - (a.number*a.factor);
+	});
+
+	for (var i = list.length - 1; i >= 0; i--) {
+		add_Row(bday, list[i]);
+	};
+
+	
+	
+}
+	
+	
+
+$(document).ready(function() {
+	$.each(monthList, function(key,value){
+		$('#month').append('<option value='+value+'>'+key+'</option>');
+	});
+	$.each(dayList, function(key,value){
+		$('#day').append('<option value='+value+'>'+value+'</option>');
+	});
+
+	$('#birthday').ajaxForm({ dataType: 'json',
+			beforeSubmit: validate,
+			success: processJSON
+	});
+});
+
+
+
+</script>
+
+</body>
+
+</hmtl>
