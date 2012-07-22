@@ -27,15 +27,12 @@ Day: <select name="day" id="day">
 </form>
 
 <div id="allresults">
-
 	<div class="header">
 		<div class="time">Length of time</div>
 		<div class="date">Time and Date</div>
 		<div class="age">Age (approx)</div>
 	</div>
-
 </div>
-
 
 <script>
 
@@ -484,15 +481,10 @@ function make_repunit_list() {
 	var repunit_list = [];
 	count = 0;
 
-	addto_master(repunit_list, repunit[9], ms_s, "repunit_9", "repunit(9)");
-	addto_master(repunit_list, repunit[10], ms_s, "repunit_10", "repunit(10)");
-	addto_master(repunit_list, repunit[7], ms_min, "repunit_7", "repunit(7)");
-	addto_master(repunit_list, repunit[8], ms_min, "repunit_8", "repunit(8)");
-	addto_master(repunit_list, repunit[5], ms_hr, "repunit_5", "repunit(5)");
-	addto_master(repunit_list, repunit[6], ms_hr, "repunit_6", "repunit(6)");
-	addto_master(repunit_list, repunit[7], ms_hr, "repunit_7", "repunit(7)");
-	addto_master(repunit_list, repunit[4], ms_dy, "repunit_4", "repunit(4)");	
-	addto_master(repunit_list, repunit[5], ms_dy, "repunit_5", "repunit(5)");
+	for (var i=9; i<=10; i++) { addto_master(repunit_list, repunit[i], ms_s, "repunit_"+i, "repunit("+i+")"); }
+	for (var i=7; i<=8; i++) { addto_master(repunit_list, repunit[i], ms_min, "repunit_"+i, "repunit("+i+")"); }
+	for (var i=5; i<=7; i++) { addto_master(repunit_list, repunit[i], ms_hr, "repunit_"+i, "repunit("+i+")"); }
+	for (var i=4; i<=5; i++) { addto_master(repunit_list, repunit[i], ms_dy, "repunit_"+i, "repunit("+i+")"); }
 
 	return repunit_list;
 }
@@ -500,19 +492,12 @@ function make_repunit_list() {
 function make_bell_list() {
 	var bell_list = [];
 	count = 0;
-	addto_master(bell_list, bell[17], ms_ms, "bell_17","bell(17)");
-	addto_master(bell_list, bell[18], ms_ms, "bell_18","bell(18)");
-	addto_master(bell_list, bell[14], ms_s, "bell_14","bell(14)");
-	addto_master(bell_list, bell[15], ms_s, "bell_15","bell(15)");
-	addto_master(bell_list, bell[11], ms_min, "bell_11","bell(11)");
-	addto_master(bell_list, bell[12], ms_min, "bell_12","bell(12)");
-	addto_master(bell_list, bell[13], ms_min, "bell_13","bell(13)");
-	addto_master(bell_list, bell[9], ms_hr, "bell_9","bell(9)");
-	addto_master(bell_list, bell[10], ms_hr, "bell_10","bell(10)");
-	addto_master(bell_list, bell[11], ms_hr, "bell_11","bell(11)");
-	addto_master(bell_list, bell[7], ms_dy, "bell_7","bell(7)");
-	addto_master(bell_list, bell[8], ms_dy, "bell_8","bell(8)");
-	addto_master(bell_list, bell[9], ms_dy, "bell_9","bell(9)");
+
+	for (var i=17; i<=18; i++) { addto_master(bell_list, bell[i], ms_ms, "bell_"+i,"bell("+i+")"); }
+	for (var i=14; i<=15; i++) { addto_master(bell_list, bell[i], ms_s, "bell_"+i,"bell("+i+")"); }
+	for (var i=11; i<=13; i++) { addto_master(bell_list, bell[i], ms_min, "bell_"+i,"bell("+i+")"); }
+	for (var i=9; i<=11; i++)  { addto_master(bell_list, bell[i], ms_hr, "bell_"+i,"bell("+i+")"); }
+	for (var i=7; i<=9; i++)   { addto_master(bell_list, bell[i], ms_dy, "bell_"+i,"bell("+i+")"); }
 
 	return bell_list;
 }
@@ -520,26 +505,13 @@ function make_bell_list() {
 function make_catalan_list() {
 	var catalan_list = [];
 	count = 0;
-	addto_master(catalan_list, catalan[22], ms_ms, "catalan_22","catalan(22)");
-	addto_master(catalan_list, catalan[23], ms_ms, "catalan_23","catalan(23)");
-	addto_master(catalan_list, catalan[24], ms_ms, "catalan_24","catalan(24)");
-	addto_master(catalan_list, catalan[16], ms_s, "catalan_16","catalan(16)");
-	addto_master(catalan_list, catalan[17], ms_s, "catalan_17","catalan(17)");
-	addto_master(catalan_list, catalan[18], ms_s, "catalan_18","catalan(18)");	
-	addto_master(catalan_list, catalan[19], ms_s, "catalan_19","catalan(19)");
-	addto_master(catalan_list, catalan[13], ms_min, "catalan_13","catalan(13)");
-	addto_master(catalan_list, catalan[14], ms_min, "catalan_14","catalan(14)");
-	addto_master(catalan_list, catalan[15], ms_min, "catalan_15","catalan(15)");
-	addto_master(catalan_list, catalan[16], ms_min, "catalan_16","catalan(16)");
-	addto_master(catalan_list, catalan[10], ms_hr, "catalan_10", "catalan(10)");
-	addto_master(catalan_list, catalan[11], ms_hr, "catalan_11", "catalan(11)");
-	addto_master(catalan_list, catalan[12], ms_hr, "catalan_12", "catalan(12)");
-	addto_master(catalan_list, catalan[13], ms_hr, "catalan_13", "catalan(13)");
-	addto_master(catalan_list, catalan[7], ms_dy, "catalan_7","catalan(7)");
-	addto_master(catalan_list, catalan[8], ms_dy, "catalan_8","catalan(8)");
-	addto_master(catalan_list, catalan[9], ms_dy, "catalan_9","catalan(9)");
-	addto_master(catalan_list, catalan[10], ms_dy, "catalan_10","catalan(10)");
 
+	for (var i=22; i<=24; i++) { addto_master(catalan_list, catalan[i], ms_ms, "catalan_"+i,"catalan("+i+")"); }
+	for (var i=16; i<=19; i++) { addto_master(catalan_list, catalan[i], ms_s, "catalan_"+i,"catalan("+i+")"); }
+	for (var i=13; i<=16; i++) { addto_master(catalan_list, catalan[i], ms_min, "catalan_"+i,"catalan("+i+")"); }
+	for (var i=10; i<=13; i++) { addto_master(catalan_list, catalan[i], ms_hr, "catalan_"+i,"catalan("+i+")"); }
+	for (var i=7; i<=10; i++)  { addto_master(catalan_list, catalan[i], ms_dy, "catalan_"+i,"catalan("+i+")"); }
+	
 	return catalan_list;
 }
 
@@ -547,11 +519,11 @@ function make_pow_2_x_list() {
 	var pow_2_x_list = [];
 	count = 0;
 	
-	for (var i=35; i<=41; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_ms,"pow_2_"+i,"2^"+i); }
-	for (var i=25; i<=31; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_s,"pow_2_"+i,"2^"+i); }
-	for (var i=20; i<=26; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_min,"pow_2_"+i,"2^"+i); }
-	for (var i=14; i<=20; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_hr,"pow_2_"+i,"2^"+i); }
-	for (var i=9; i<=15; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_dy,"pow_2_"+i,"2^"+i); }
+	for (var i=35; i<=41; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_ms, "pow_2_"+i,"2^"+i); }
+	for (var i=25; i<=31; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_s, "pow_2_"+i,"2^"+i); }
+	for (var i=20; i<=26; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_min, "pow_2_"+i,"2^"+i); }
+	for (var i=14; i<=20; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_hr, "pow_2_"+i,"2^"+i); }
+	for (var i=9; i<=15; i++)  { addto_master(pow_2_x_list, Math.pow(2,i), ms_dy, "pow_2_"+i,"2^"+i); }
 
 	return pow_2_x_list;
 }
@@ -586,11 +558,11 @@ function make_fibonacci_list() {
 	var fibonacci_list = [];
 	count = 0;
 
-	for (var i=52; i<=62; i++) { addto_master(fibonacci_list, fibonacci[i], ms_ms, "fib_"+i,"fibonacci("+i+")"); }
-	for (var i=38; i<=47; i++) { addto_master(fibonacci_list, fibonacci[i], ms_s, "fib_"+i,"fibonacci("+i+")"); }
-	for (var i=30; i<=39; i++) { addto_master(fibonacci_list, fibonacci[i], ms_min, "fib_"+i,"fibonacci("+i+")"); }
-	for (var i=21; i<=30; i++) { addto_master(fibonacci_list, fibonacci[i], ms_hr, "fib_"+i,"fibonacci("+i+")"); }
-	for (var i=14; i<=24; i++) { addto_master(fibonacci_list, fibonacci[i], ms_dy, "fib_"+i,"fibonacci("+i+")"); }
+	for (var i=52; i<=62; i++) { addto_master(fibonacci_list, fibonacci[i], ms_ms, "fib_"+i, "fibonacci("+i+")"); }
+	for (var i=38; i<=47; i++) { addto_master(fibonacci_list, fibonacci[i], ms_s, "fib_"+i, "fibonacci("+i+")"); }
+	for (var i=30; i<=39; i++) { addto_master(fibonacci_list, fibonacci[i], ms_min, "fib_"+i, "fibonacci("+i+")"); }
+	for (var i=21; i<=30; i++) { addto_master(fibonacci_list, fibonacci[i], ms_hr, "fib_"+i, "fibonacci("+i+")"); }
+	for (var i=14; i<=24; i++) { addto_master(fibonacci_list, fibonacci[i], ms_dy, "fib_"+i, "fibonacci("+i+")"); }
 
 	return fibonacci_list;
 }
@@ -598,17 +570,12 @@ function make_fibonacci_list() {
 function make_factorials_list() {
 	var factorials_list = [];
 	count = 0;
-	addto_master(factorials_list, factorials[14], ms_ms, "fact14","14!");
-	addto_master(factorials_list, factorials[15], ms_ms, "fact15","15!");
-	addto_master(factorials_list, factorials[11], ms_s, "fact11","11!");
-	addto_master(factorials_list, factorials[12], ms_s, "fact12","12!");
-	addto_master(factorials_list, factorials[10], ms_min, "fact10","10!");
-	addto_master(factorials_list, factorials[11], ms_min, "fact11","11!");
-	addto_master(factorials_list, factorials[8],  ms_hr, "fact8","8!");
-	addto_master(factorials_list, factorials[9],  ms_hr, "fact9","9!");
-	addto_master(factorials_list, factorials[6], ms_dy, "fact6","6!");
-	addto_master(factorials_list, factorials[7], ms_dy, "fact7","7!");
-	addto_master(factorials_list, factorials[8], ms_dy, "fact8","8!");
+	
+	for (var i=14; i<=15; i++) { addto_master(factorials_list, factorials[i], ms_ms, "fact"+i, i+"!"); }
+	for (var i=11; i<=12; i++) { addto_master(factorials_list, factorials[i], ms_s, "fact"+i, i+"!"); }
+	for (var i=10; i<=11; i++) { addto_master(factorials_list, factorials[i], ms_min, "fact"+i, i+"!"); }
+	for (var i=8; i<=9; i++) { addto_master(factorials_list, factorials[i], ms_hr, "fact"+i, i+"!"); }
+	for (var i=6; i<=8; i++) { addto_master(factorials_list, factorials[i], ms_dy, "fact"+i, i+"!"); }	
 
 	return factorials_list;
 }
@@ -616,11 +583,10 @@ function make_factorials_list() {
 function make_primes_list() {
 	var primes_list = [];
 	count = 0;
-	addto_master(primes_list, primes["10^7"], ms_s, "prime_10_7","prime(10^7)");
-	addto_master(primes_list, primes["10^8"], ms_s, "prime_10_8","prime(10^8)");
-	addto_master(primes_list, primes["10^5"], ms_min, "prime_10_5","prime(10^5)");
-	addto_master(primes_list, primes["10^6"], ms_min, "prime_10_6","prime(10^6)"); 
-	addto_master(primes_list, primes["10^4"], ms_hr, "prime_10_4","prime(10^4)");
+	
+	for (var i=7; i<=8; i++) { addto_master(primes_list, primes["10^"+i], ms_s, "prime_10_"+i,"prime(10^"+i+")"); }
+	for (var i=5; i<=6; i++) { addto_master(primes_list, primes["10^"+i], ms_min, "prime_10_"+i,"prime(10^"+i+")"); }
+	for (var i=4; i<=4; i++) { addto_master(primes_list, primes["10^"+i], ms_hr, "prime_10_"+i,"prime(10^"+i+")"); }
 
 	return primes_list;
 }
