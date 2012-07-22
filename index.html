@@ -39,8 +39,6 @@ Day: <select name="day" id="day">
 
 <script>
 
-var master_count = 0;
-
 var bell = {
 	0 : 1, 
 	1 : 1, 
@@ -310,7 +308,7 @@ function validate(formData, jqForm, options) {
 	try {
 		Date.validateYear(y);
 	} catch(e) {
-		alert('Year must be a number from 0 to 9999');
+		alert('Year must be a number from 1 to 9999');
 		return false;
 	}
 	
@@ -406,7 +404,7 @@ function addAge(milliseconds, element) {
 	}
 }
 
-function add_Row(bday, array) {
+function add_Row(array) {
 
 	var elem = array["element"];
 	var lab = array["label"];
@@ -414,7 +412,9 @@ function add_Row(bday, array) {
 	var number = array["number"];
 	var factor = array["factor"];
 
-	var dayclone = bday.clone();
+	var default_date = Date.today();
+
+	var dayclone = default_date.clone();
 	dayclone.addMilliseconds(number*factor);
 	var date = dayclone.toString("hh:MM MMM d, yyyy");
 
@@ -432,233 +432,259 @@ function add_Row(bday, array) {
 	$(".item."+elem).addClass("age"+ageclass);
 }
 
+function edit_Row(bday, array) {
+	var elem = array["element"];
+	var number = array["number"];
+	var factor = array["factor"];
+
+	var dayclone = bday.clone();
+	dayclone.addMilliseconds(number*factor);
+	var date = dayclone.toString("hh:MM MMM d, yyyy");
+
+	$(".date."+elem).html(date);
+
+}
+
+
+var count = 0;
+
+var ms_ms = 1;
+var ms_s = 1000;
+var ms_min = 1000*60;
+var ms_hr = 1000*60*60;
+var ms_dy = 1000*60*60*24;
+
 function addto_master(array, number, factor, element, label) {
 
 	var unit = "";
-	if (factor == 1) {
+	if (factor == ms_ms) {
 		unit = "msec";
-	} else if (factor == 1000) {
+	} else if (factor == ms_s) {
 		unit = "sec";
-	} else if (factor == 1000*60) {
+	} else if (factor == ms_min) {
 		unit = "min";
-	} else if (factor == 1000*60*60) {
+	} else if (factor == ms_hr) {
 		unit = "hour";
-	} else if (factor == 1000*60*60*24) {
+	} else if (factor == ms_dy) {
 		unit = "day";
 	}
 
-	array[master_count] = [];
-	array[master_count]["number"] = number;
-	array[master_count]["factor"] = factor;
-	array[master_count]["element"] = element+unit;
-	array[master_count]["label"] = label;
-	array[master_count]["unit"] = unit;
+	array[count] = [];
+	array[count]["number"] = number;
+	array[count]["factor"] = factor;
+	array[count]["element"] = element+unit;
+	array[count]["label"] = label;
+	array[count]["unit"] = unit;
 
-	master_count++;
+	count++;
 
 }
 
-function processJSON(data) {	
-	var bday = new Date(data.year, data.month, data.day);
+function make_repunit_list() {
+	var repunit_list = [];
+	count = 0;
 
-	var ms_ms = 1;
-	var ms_s = 1000;
-	var ms_min = 1000*60;
-	var ms_hr = 1000*60*60;
-	var ms_dy = 1000*60*60*24;
+	addto_master(repunit_list, repunit[9], ms_s, "repunit_9", "repunit(9)");
+	addto_master(repunit_list, repunit[10], ms_s, "repunit_10", "repunit(10)");
+	addto_master(repunit_list, repunit[7], ms_min, "repunit_7", "repunit(7)");
+	addto_master(repunit_list, repunit[8], ms_min, "repunit_8", "repunit(8)");
+	addto_master(repunit_list, repunit[5], ms_hr, "repunit_5", "repunit(5)");
+	addto_master(repunit_list, repunit[6], ms_hr, "repunit_6", "repunit(6)");
+	addto_master(repunit_list, repunit[7], ms_hr, "repunit_7", "repunit(7)");
+	addto_master(repunit_list, repunit[4], ms_dy, "repunit_4", "repunit(4)");	
+	addto_master(repunit_list, repunit[5], ms_dy, "repunit_5", "repunit(5)");
 
-	var list = [];
-	
-	addto_master(list, repunit[9], ms_s, "repunit_9", "repunit(9)");
-	addto_master(list, repunit[10], ms_s, "repunit_10", "repunit(10)");
-	addto_master(list, repunit[7], ms_min, "repunit_7", "repunit(7)");
-	addto_master(list, repunit[8], ms_min, "repunit_8", "repunit(8)");
-	addto_master(list, repunit[5], ms_hr, "repunit_5", "repunit(5)");
-	addto_master(list, repunit[6], ms_hr, "repunit_6", "repunit(6)");
-	addto_master(list, repunit[7], ms_hr, "repunit_7", "repunit(7)");
-	addto_master(list, repunit[4], ms_dy, "repunit_4", "repunit(4)");	
-	addto_master(list, repunit[5], ms_dy, "repunit_5", "repunit(5)");
+	return repunit_list;
+}
 
+function make_bell_list() {
+	var bell_list = [];
+	count = 0;
+	addto_master(bell_list, bell[17], ms_ms, "bell_17","bell(17)");
+	addto_master(bell_list, bell[18], ms_ms, "bell_18","bell(18)");
+	addto_master(bell_list, bell[14], ms_s, "bell_14","bell(14)");
+	addto_master(bell_list, bell[15], ms_s, "bell_15","bell(15)");
+	addto_master(bell_list, bell[11], ms_min, "bell_11","bell(11)");
+	addto_master(bell_list, bell[12], ms_min, "bell_12","bell(12)");
+	addto_master(bell_list, bell[13], ms_min, "bell_13","bell(13)");
+	addto_master(bell_list, bell[9], ms_hr, "bell_9","bell(9)");
+	addto_master(bell_list, bell[10], ms_hr, "bell_10","bell(10)");
+	addto_master(bell_list, bell[11], ms_hr, "bell_11","bell(11)");
+	addto_master(bell_list, bell[7], ms_dy, "bell_7","bell(7)");
+	addto_master(bell_list, bell[8], ms_dy, "bell_8","bell(8)");
+	addto_master(bell_list, bell[9], ms_dy, "bell_9","bell(9)");
 
-	addto_master(list, bell[17], ms_ms, "bell_17","bell(17)");
-	addto_master(list, bell[18], ms_ms, "bell_18","bell(18)");
-	addto_master(list, bell[14], ms_s, "bell_14","bell(14)");
-	addto_master(list, bell[15], ms_s, "bell_15","bell(15)");
-	addto_master(list, bell[11], ms_min, "bell_11","bell(11)");
-	addto_master(list, bell[12], ms_min, "bell_12","bell(12)");
-	addto_master(list, bell[13], ms_min, "bell_13","bell(13)");
-	addto_master(list, bell[9], ms_hr, "bell_9","bell(9)");
-	addto_master(list, bell[10], ms_hr, "bell_10","bell(10)");
-	addto_master(list, bell[11], ms_hr, "bell_11","bell(11)");
-	addto_master(list, bell[7], ms_dy, "bell_7","bell(7)");
-	addto_master(list, bell[8], ms_dy, "bell_8","bell(8)");
-	addto_master(list, bell[9], ms_dy, "bell_9","bell(9)");
+	return bell_list;
+}
 
-	addto_master(list, catalan[22], ms_ms, "catalan_22","catalan(22)");
-	addto_master(list, catalan[23], ms_ms, "catalan_23","catalan(23)");
-	addto_master(list, catalan[24], ms_ms, "catalan_24","catalan(24)");
-	addto_master(list, catalan[16], ms_s, "catalan_16","catalan(16)");
-	addto_master(list, catalan[17], ms_s, "catalan_17","catalan(17)");
-	addto_master(list, catalan[18], ms_s, "catalan_18","catalan(18)");	
-	addto_master(list, catalan[19], ms_s, "catalan_19","catalan(19)");
-	addto_master(list, catalan[13], ms_min, "catalan_13","catalan(13)");
-	addto_master(list, catalan[14], ms_min, "catalan_14","catalan(14)");
-	addto_master(list, catalan[15], ms_min, "catalan_15","catalan(15)");
-	addto_master(list, catalan[16], ms_min, "catalan_16","catalan(16)");
-	addto_master(list, catalan[10], ms_hr, "catalan_10", "catalan(10)");
-	addto_master(list, catalan[11], ms_hr, "catalan_11", "catalan(11)");
-	addto_master(list, catalan[12], ms_hr, "catalan_12", "catalan(12)");
-	addto_master(list, catalan[13], ms_hr, "catalan_13", "catalan(13)");
-	addto_master(list, catalan[7], ms_dy, "catalan_7","catalan(7)");
-	addto_master(list, catalan[8], ms_dy, "catalan_8","catalan(8)");
-	addto_master(list, catalan[9], ms_dy, "catalan_9","catalan(9)");
-	addto_master(list, catalan[10], ms_dy, "catalan_10","catalan(10)");
-	
+function make_catalan_list() {
+	var catalan_list = [];
+	count = 0;
+	addto_master(catalan_list, catalan[22], ms_ms, "catalan_22","catalan(22)");
+	addto_master(catalan_list, catalan[23], ms_ms, "catalan_23","catalan(23)");
+	addto_master(catalan_list, catalan[24], ms_ms, "catalan_24","catalan(24)");
+	addto_master(catalan_list, catalan[16], ms_s, "catalan_16","catalan(16)");
+	addto_master(catalan_list, catalan[17], ms_s, "catalan_17","catalan(17)");
+	addto_master(catalan_list, catalan[18], ms_s, "catalan_18","catalan(18)");	
+	addto_master(catalan_list, catalan[19], ms_s, "catalan_19","catalan(19)");
+	addto_master(catalan_list, catalan[13], ms_min, "catalan_13","catalan(13)");
+	addto_master(catalan_list, catalan[14], ms_min, "catalan_14","catalan(14)");
+	addto_master(catalan_list, catalan[15], ms_min, "catalan_15","catalan(15)");
+	addto_master(catalan_list, catalan[16], ms_min, "catalan_16","catalan(16)");
+	addto_master(catalan_list, catalan[10], ms_hr, "catalan_10", "catalan(10)");
+	addto_master(catalan_list, catalan[11], ms_hr, "catalan_11", "catalan(11)");
+	addto_master(catalan_list, catalan[12], ms_hr, "catalan_12", "catalan(12)");
+	addto_master(catalan_list, catalan[13], ms_hr, "catalan_13", "catalan(13)");
+	addto_master(catalan_list, catalan[7], ms_dy, "catalan_7","catalan(7)");
+	addto_master(catalan_list, catalan[8], ms_dy, "catalan_8","catalan(8)");
+	addto_master(catalan_list, catalan[9], ms_dy, "catalan_9","catalan(9)");
+	addto_master(catalan_list, catalan[10], ms_dy, "catalan_10","catalan(10)");
 
+	return catalan_list;
+}
 
-	addto_master(list, Math.pow(2,35), ms_ms,"pow_2_35","2^35");
-	addto_master(list, Math.pow(2,36), ms_ms,"pow_2_36","2^36");
-	addto_master(list, Math.pow(2,37), ms_ms,"pow_2_37","2^37");
-	addto_master(list, Math.pow(2,38), ms_ms,"pow_2_38","2^38");
-	addto_master(list, Math.pow(2,39), ms_ms,"pow_2_39","2^39");
-	addto_master(list, Math.pow(2,40), ms_ms,"pow_2_40","2^40");
-	addto_master(list, Math.pow(2,41), ms_ms,"pow_2_41","2^41");
-	addto_master(list, Math.pow(2,25), ms_s, "pow_2_25","2^25");
-	addto_master(list, Math.pow(2,26), ms_s, "pow_2_26","2^26");
-	addto_master(list, Math.pow(2,27), ms_s, "pow_2_27","2^27");
-	addto_master(list, Math.pow(2,28), ms_s, "pow_2_28","2^28");
-	addto_master(list, Math.pow(2,29), ms_s, "pow_2_29","2^29");
-	addto_master(list, Math.pow(2,30), ms_s, "pow_2_30","2^30");
-	addto_master(list, Math.pow(2,31), ms_s, "pow_2_31","2^31");
-	addto_master(list, Math.pow(2,20), ms_min, "pow_2_4","2^20");
-	addto_master(list, Math.pow(2,21), ms_min, "pow_2_5","2^21");
-	addto_master(list, Math.pow(2,22), ms_min, "pow_2_6","2^22");
-	addto_master(list, Math.pow(2,23), ms_min, "pow_2_7","2^23");
-	addto_master(list, Math.pow(2,24), ms_min, "pow_2_8","2^24"); 
-	addto_master(list, Math.pow(2,25), ms_min, "pow_2_9","2^25");
-	addto_master(list, Math.pow(2,26), ms_min, "pow_2_10","2^26");
-	addto_master(list, Math.pow(2,14), ms_hr, "pow_2_14","2^14");
-	addto_master(list, Math.pow(2,15), ms_hr, "pow_2_15","2^15");
-	addto_master(list, Math.pow(2,16), ms_hr, "pow_2_16","2^16");
-	addto_master(list, Math.pow(2,17), ms_hr, "pow_2_17","2^17");
-	addto_master(list, Math.pow(2,18), ms_hr, "pow_2_18","2^18"); 
-	addto_master(list, Math.pow(2,19), ms_hr, "pow_2_19","2^19");
-	addto_master(list, Math.pow(2,20), ms_hr, "pow_2_20","2^20");
-	addto_master(list, Math.pow(2,9), ms_dy, "pow_2_9","2^9");
-	addto_master(list, Math.pow(2,10), ms_dy, "pow_2_10","2^10");
-	addto_master(list, Math.pow(2,11), ms_dy, "pow_2_11","2^11");
-	addto_master(list, Math.pow(2,12), ms_dy, "pow_2_12","2^12");
-	addto_master(list, Math.pow(2,13), ms_dy, "pow_2_13","2^13");
-	addto_master(list, Math.pow(2,14), ms_dy, "pow_2_14","2^14");
-	addto_master(list, Math.pow(2,15), ms_dy, "pow_2_15","2^15");
+function make_pow_2_x_list() {
+	var pow_2_x_list = [];
+	count = 0;
 	
-	addto_master(list, 123456789, ms_s, "n_123456789", "123,456,789");
-	addto_master(list, 1234567890, ms_s, "n_1234567890", "1,234,567,890");
-	addto_master(list, 987654321, ms_s, "n_987654321", "987,654,321");
-	
-	addto_master(list, Math.pow(10,8), ms_s, "pow_10_8","100 million");
-	addto_master(list, Math.pow(10,9), ms_s, "pow_10_9","1 billion");
-	addto_master(list, Math.pow(10,6), ms_min, "pow_10_6","1 million");
-	addto_master(list, Math.pow(10,7), ms_min, "pow_10_7","10 million");  
-	addto_master(list, Math.pow(10,4), ms_hr, "pow_10_4","10 thousand");
-	addto_master(list, Math.pow(10,5), ms_hr, "pow_10_5","100 thousand");
-	addto_master(list, Math.pow(10,6), ms_hr, "pow_10_6","1 million");
-	addto_master(list, Math.pow(10,3), ms_dy, "pow_10_3","1 thousand");         
-	addto_master(list, Math.pow(10,4), ms_dy, "pow_10_4","10 thousand");
-	
+	for (var i=35; i<=41; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_ms,"pow_2_"+i,"2^"+i); }
+	for (var i=25; i<=31; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_s,"pow_2_"+i,"2^"+i); }
+	for (var i=20; i<=26; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_min,"pow_2_"+i,"2^"+i); }
+	for (var i=14; i<=20; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_hr,"pow_2_"+i,"2^"+i); }
+	for (var i=9; i<=15; i++) { addto_master(pow_2_x_list, Math.pow(2,i), ms_dy,"pow_2_"+i,"2^"+i); }
 
-	addto_master(list, fibonacci[52], ms_ms, "fib_52","fibonacci(52)");
-	addto_master(list, fibonacci[53], ms_ms, "fib_53","fibonacci(53)");
-	addto_master(list, fibonacci[54], ms_ms, "fib_54","fibonacci(54)");
-	addto_master(list, fibonacci[55], ms_ms, "fib_55","fibonacci(55)");
-	addto_master(list, fibonacci[56], ms_ms, "fib_56","fibonacci(56)");
-	addto_master(list, fibonacci[57], ms_ms, "fib_57","fibonacci(57)");
-	addto_master(list, fibonacci[58], ms_ms, "fib_58","fibonacci(58)");
-	addto_master(list, fibonacci[59], ms_ms, "fib_59","fibonacci(59)");
-	addto_master(list, fibonacci[60], ms_ms, "fib_60","fibonacci(60)");
-	addto_master(list, fibonacci[61], ms_ms, "fib_61","fibonacci(61)");
-	addto_master(list, fibonacci[62], ms_ms, "fib_62","fibonacci(62)");
-	addto_master(list, fibonacci[38], ms_s, "fib_38","fibonacci(38)");
-	addto_master(list, fibonacci[39], ms_s, "fib_39","fibonacci(39)");
-	addto_master(list, fibonacci[40], ms_s, "fib_40","fibonacci(40)");
-	addto_master(list, fibonacci[41], ms_s, "fib_41","fibonacci(41)");
-	addto_master(list, fibonacci[42], ms_s, "fib_42","fibonacci(42)");
-	addto_master(list, fibonacci[43], ms_s, "fib_43","fibonacci(43)");
-	addto_master(list, fibonacci[44], ms_s, "fib_44","fibonacci(44)");
-	addto_master(list, fibonacci[45], ms_s, "fib_45","fibonacci(45)");
-	addto_master(list, fibonacci[46], ms_s, "fib_46","fibonacci(46)");
-	addto_master(list, fibonacci[47], ms_s, "fib_47","fibonacci(47)");
-	addto_master(list, fibonacci[30], ms_min, "fib_30","fibonacci(30)");
-	addto_master(list, fibonacci[32], ms_min, "fib_32","fibonacci(32)");
-	addto_master(list, fibonacci[31], ms_min, "fib_31","fibonacci(31)");
-	addto_master(list, fibonacci[33], ms_min, "fib_33","fibonacci(33)");
-	addto_master(list, fibonacci[34], ms_min, "fib_34","fibonacci(34)");
-	addto_master(list, fibonacci[35], ms_min, "fib_35","fibonacci(35)");
-	addto_master(list, fibonacci[36], ms_min, "fib_36","fibonacci(36)");
-	addto_master(list, fibonacci[37], ms_min, "fib_37","fibonacci(37)");
-	addto_master(list, fibonacci[38], ms_min, "fib_38","fibonacci(38)");
-	addto_master(list, fibonacci[39], ms_min, "fib_39","fibonacci(39)");
-	addto_master(list, fibonacci[21], ms_hr, "fib_21","fibonacci(21)");
-	addto_master(list, fibonacci[22], ms_hr, "fib_22","fibonacci(22)");
-	addto_master(list, fibonacci[23], ms_hr, "fib_23","fibonacci(23)");
-	addto_master(list, fibonacci[24], ms_hr, "fib_24","fibonacci(24)");
-	addto_master(list, fibonacci[25], ms_hr, "fib_25","fibonacci(25)");
-	addto_master(list, fibonacci[26], ms_hr, "fib_26","fibonacci(26)");
-	addto_master(list, fibonacci[27], ms_hr, "fib_27","fibonacci(27)");
-	addto_master(list, fibonacci[28], ms_hr, "fib_28","fibonacci(28)");
-	addto_master(list, fibonacci[29], ms_hr, "fib_29","fibonacci(29)");
-	addto_master(list, fibonacci[30], ms_hr, "fib_30","fibonacci(30)");
-	addto_master(list, fibonacci[14], ms_dy, "fib_14","fibonacci(14)");
-	addto_master(list, fibonacci[15], ms_dy, "fib_15","fibonacci(15)");
-	addto_master(list, fibonacci[16], ms_dy, "fib_16","fibonacci(16)");
-	addto_master(list, fibonacci[17], ms_dy, "fib_17","fibonacci(17)");
-	addto_master(list, fibonacci[18], ms_dy, "fib_18","fibonacci(18)");
-	addto_master(list, fibonacci[19], ms_dy, "fib_19","fibonacci(19)");
-	addto_master(list, fibonacci[20], ms_dy, "fib_20","fibonacci(20)");
-	addto_master(list, fibonacci[21], ms_dy, "fib_21","fibonacci(21)"); 
-	addto_master(list, fibonacci[22], ms_dy, "fib_22","fibonacci(22)");
-	addto_master(list, fibonacci[23], ms_dy, "fib_23","fibonacci(23)");
-	addto_master(list, fibonacci[24], ms_dy, "fib_24","fibonacci(24)");
-	
-	
-	addto_master(list, factorials[14], ms_ms, "fact14","14!");
-	addto_master(list, factorials[15], ms_ms, "fact15","15!");
-	addto_master(list, factorials[11], ms_s, "fact11","11!");
-	addto_master(list, factorials[12], ms_s, "fact12","12!");
-	addto_master(list, factorials[10], ms_min, "fact10","10!");
-	addto_master(list, factorials[11], ms_min, "fact11","11!");
-	addto_master(list, factorials[8],  ms_hr, "fact8","8!");
-	addto_master(list, factorials[9],  ms_hr, "fact9","9!");
-	addto_master(list, factorials[6], ms_dy, "fact6","6!");
-	addto_master(list, factorials[7], ms_dy, "fact7","7!");
-	addto_master(list, factorials[8], ms_dy, "fact8","8!");
-	
-	
-	addto_master(list, primes["10^7"], ms_s, "prime_10_7","prime(10^7)");
-	addto_master(list, primes["10^8"], ms_s, "prime_10_8","prime(10^8)");
-	addto_master(list, primes["10^5"], ms_min, "prime_10_5","prime(10^5)");
-	addto_master(list, primes["10^6"], ms_min, "prime_10_6","prime(10^6)"); 
-	addto_master(list, primes["10^4"], ms_hr, "prime_10_4","prime(10^4)");
-	
-	
-	addto_master(list, fermat[5], ms_hr, "fermat_5","fermat(5)");
-	
-	addto_master(list, mersenne[8], ms_s, "mersenne_8","mersenne(8)");
+	return pow_2_x_list;
+}
 
+function make_digits_list() {
+	var digits_list = [];
+	count = 0;
+	addto_master(digits_list, 123456789, ms_s, "n_123456789", "123,456,789");
+	addto_master(digits_list, 1234567890, ms_s, "n_1234567890", "1,234,567,890");
+	addto_master(digits_list, 987654321, ms_s, "n_987654321", "987,654,321");
 
-	list.sort(function(a,b) {
+	return digits_list;
+}
+
+function make_pow_10_x_list() {
+	var pow_10_x_list = [];
+	count = 0;
+	addto_master(pow_10_x_list, Math.pow(10,8), ms_s, "pow_10_8","100 million");
+	addto_master(pow_10_x_list, Math.pow(10,9), ms_s, "pow_10_9","1 billion");
+	addto_master(pow_10_x_list, Math.pow(10,6), ms_min, "pow_10_6","1 million");
+	addto_master(pow_10_x_list, Math.pow(10,7), ms_min, "pow_10_7","10 million");  
+	addto_master(pow_10_x_list, Math.pow(10,4), ms_hr, "pow_10_4","10 thousand");
+	addto_master(pow_10_x_list, Math.pow(10,5), ms_hr, "pow_10_5","100 thousand");
+	addto_master(pow_10_x_list, Math.pow(10,6), ms_hr, "pow_10_6","1 million");
+	addto_master(pow_10_x_list, Math.pow(10,3), ms_dy, "pow_10_3","1 thousand");         
+	addto_master(pow_10_x_list, Math.pow(10,4), ms_dy, "pow_10_4","10 thousand");
+
+	return pow_10_x_list;
+}
+
+function make_fibonacci_list() {
+	var fibonacci_list = [];
+	count = 0;
+
+	for (var i=52; i<=62; i++) { addto_master(fibonacci_list, fibonacci[i], ms_ms, "fib_"+i,"fibonacci("+i+")"); }
+	for (var i=38; i<=47; i++) { addto_master(fibonacci_list, fibonacci[i], ms_s, "fib_"+i,"fibonacci("+i+")"); }
+	for (var i=30; i<=39; i++) { addto_master(fibonacci_list, fibonacci[i], ms_min, "fib_"+i,"fibonacci("+i+")"); }
+	for (var i=21; i<=30; i++) { addto_master(fibonacci_list, fibonacci[i], ms_hr, "fib_"+i,"fibonacci("+i+")"); }
+	for (var i=14; i<=24; i++) { addto_master(fibonacci_list, fibonacci[i], ms_dy, "fib_"+i,"fibonacci("+i+")"); }
+
+	return fibonacci_list;
+}
+
+function make_factorials_list() {
+	var factorials_list = [];
+	count = 0;
+	addto_master(factorials_list, factorials[14], ms_ms, "fact14","14!");
+	addto_master(factorials_list, factorials[15], ms_ms, "fact15","15!");
+	addto_master(factorials_list, factorials[11], ms_s, "fact11","11!");
+	addto_master(factorials_list, factorials[12], ms_s, "fact12","12!");
+	addto_master(factorials_list, factorials[10], ms_min, "fact10","10!");
+	addto_master(factorials_list, factorials[11], ms_min, "fact11","11!");
+	addto_master(factorials_list, factorials[8],  ms_hr, "fact8","8!");
+	addto_master(factorials_list, factorials[9],  ms_hr, "fact9","9!");
+	addto_master(factorials_list, factorials[6], ms_dy, "fact6","6!");
+	addto_master(factorials_list, factorials[7], ms_dy, "fact7","7!");
+	addto_master(factorials_list, factorials[8], ms_dy, "fact8","8!");
+
+	return factorials_list;
+}
+
+function make_primes_list() {
+	var primes_list = [];
+	count = 0;
+	addto_master(primes_list, primes["10^7"], ms_s, "prime_10_7","prime(10^7)");
+	addto_master(primes_list, primes["10^8"], ms_s, "prime_10_8","prime(10^8)");
+	addto_master(primes_list, primes["10^5"], ms_min, "prime_10_5","prime(10^5)");
+	addto_master(primes_list, primes["10^6"], ms_min, "prime_10_6","prime(10^6)"); 
+	addto_master(primes_list, primes["10^4"], ms_hr, "prime_10_4","prime(10^4)");
+
+	return primes_list;
+}
+
+function make_fermat_list() {
+	var fermat_list = [];
+	count = 0;
+	addto_master(fermat_list, fermat[5], ms_hr, "fermat_5","fermat(5)");
+
+	return fermat_list;
+}
+
+function make_mersenne_list() {
+	var mersenne_list = [];
+	count = 0;
+	addto_master(mersenne_list, mersenne[8], ms_s, "mersenne_8","mersenne(8)");
+
+	return mersenne_list;
+}
+
+var master_list = [];
+
+function initialize_table() {	
+	
+	var repunit_list = make_repunit_list();
+	var bell_list = make_bell_list();
+	var catalan_list = make_catalan_list();
+	var pow_2_x_list = make_pow_2_x_list();
+	var digits_list = make_digits_list();
+	var pow_10_x_list = make_pow_10_x_list();
+	var fibonacci_list = make_fibonacci_list();
+	var factorials_list = make_factorials_list();
+	var primes_list = make_primes_list();
+	var fermat_list = make_fermat_list();
+	var mersenne_list = make_mersenne_list();
+
+	master_list = master_list.concat(repunit_list);
+	master_list = master_list.concat(bell_list);
+	master_list = master_list.concat(catalan_list);
+	master_list = master_list.concat(pow_2_x_list);
+	master_list = master_list.concat(digits_list);
+	master_list = master_list.concat(pow_10_x_list);
+	master_list = master_list.concat(fibonacci_list);
+	master_list = master_list.concat(factorials_list);
+	master_list = master_list.concat(primes_list);
+	master_list = master_list.concat(fermat_list);
+	master_list = master_list.concat(mersenne_list);
+
+	master_list.sort(function(a,b) {
 		return (b.number*b.factor) - (a.number*a.factor);
 	});
 
-	for (var i = list.length - 1; i >= 0; i--) {
-		add_Row(bday, list[i]);
-	};
-
-	
-	
+	for (var i = master_list.length - 1; i >= 0; i--) {
+		add_Row(master_list[i]);
+	};	
 }
+
+function processJSON(data) {
+	var bday = new Date(data.year, data.month, data.day);
 	
-	
+	for (var i = 0; i < master_list.length; i++) {
+		edit_Row(bday, master_list[i]);
+	}
+}
 
 $(document).ready(function() {
 	$.each(monthList, function(key,value){
@@ -668,16 +694,14 @@ $(document).ready(function() {
 		$('#day').append('<option value='+value+'>'+value+'</option>');
 	});
 
+	initialize_table();
+
 	$('#birthday').ajaxForm({ dataType: 'json',
 			beforeSubmit: validate,
 			success: processJSON
 	});
 });
 
-
-
 </script>
-
 </body>
-
 </hmtl>
