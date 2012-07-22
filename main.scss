@@ -3,6 +3,23 @@ body {
 	font-size: 12px;
 }
 
+h1, form, #functions, #allresults {
+	margin-left: 20px;
+}
+
+#explanation {
+	width: 480px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border: 2px solid #eee;
+	h1 {
+		margin-left: 0px;
+		margin-top: 0px;
+		font-size: 14px;
+	}
+	padding: 12px;
+}
+
 button {
 	background: #def;
 }
