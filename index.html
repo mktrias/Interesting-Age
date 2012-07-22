@@ -15,21 +15,22 @@ http://sass-lang.com/  -->
 
 <body>
 
-<h1>Interesting</h1>
+<h1>Interesting Age</h1>
 
 <p id="#form-message"></p>
 <form id="birthday" action="json-echo.php" method="GET">
 	Enter your Birthday:<br>
-	Year: <input type="text" name="year" value="" />
+	Year: <input type="text" name="year" id="year" value="" />
 	Month: <select name="month" id="month"></select>
 	Day: <select name="day" id="day"></select> <br>
 <input type="submit" value="Submit" />
 </form>
 
+<p>Click the buttons to show or hide mathematical functions:</p>
 <div id="showhide">
 	<button type="button" id="pow2_" class="">Power of 2</button>
 	<button type="button" id="pow10_" class="">Power of 10</button>
-	<button type="button" id="factorial" class="">Factorial</button>
+	<button type="button" id="factorial" class="show">Factorial</button>
 	<button type="button" id="repunit" class="">Repunit</button>
 	<button type="button" id="bell" class="">Bell</button>
 	<button type="button" id="fibonacci" class="">Fibonacci</button><br />
@@ -40,6 +41,9 @@ http://sass-lang.com/  -->
 	<button type="button" id="mersenne" class="">Mersenne</button>
 	<button type="button" id="digits" class="">Digits</button>
 </div>
+
+<br>
+<br>
 
 <div id="allresults">
 	<div class="header">
@@ -445,7 +449,10 @@ function add_Row(array) {
 		ageclass = myage *10;
 	};
 	$(".item."+elem).addClass("age"+ageclass);
-	$(".item."+list_name).hide();
+
+	if ( !$("button#"+list_name).hasClass("show") ) {
+		$(".item."+list_name).hide();
+	}
 
 }
 
@@ -772,10 +779,19 @@ $(document).ready(function() {
 		$('#day').append('<option value='+value+'>'+value+'</option>');
 	});
 
+/* Set default to the current date */
+	var Month = Date.today().toString("MMM");
+	var MonthNum = Date.getMonthNumberFromName(Month);
 
-/* This next function was copy-pasted from 
-http://stackoverflow.com/questions/3797193/best-way-to-code-a-big-one-click-toggle-button-to-replace-a-single-checkbox-and
-*/
+	var DayNum = Date.today().toString("d");
+	var Year = Date.today().toString("yyyy")
+
+	$("#month option[value='"+MonthNum+"']").attr("selected","selected");
+	$("#day option[value='"+DayNum+"']").attr("selected","selected");
+	$("#year").val(Year);
+
+
+/* Make toggle buttons */
 	$("#factorial").click( function(event) { hideshow($(event.currentTarget), "factorial"); });
 	$("#repunit").click( function(event) { hideshow($(event.currentTarget), "repunit"); });
 	$("#bell").click( function(event) { hideshow($(event.currentTarget), "bell"); });
