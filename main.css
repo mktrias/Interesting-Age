@@ -3,18 +3,54 @@ body {
   font-size: 12px; }
 
 h1, form, #functions, #allresults {
-  margin-left: 20px; }
-
-#explanation {
-  width: 480px;
+  position: absolute;
+  margin-left: 10px;
   margin-top: 10px;
-  margin-bottom: 10px;
-  border: 2px solid #eee;
-  padding: 12px; }
-  #explanation h1 {
-    margin-left: 0px;
-    margin-top: 0px;
-    font-size: 14px; }
+  margin-bottom: 10px; }
+
+form {
+  margin-top: 50px; }
+
+#functions {
+  margin-top: 100px; }
+
+#allresults {
+  margin-top: 200px; }
+
+dl {
+  position: relative;
+  float: right;
+  margin-left: 550px;
+  margin-right: 15px;
+  margin-top: 55px;
+  margin-bottom: 0px;
+  padding: 0px; }
+
+dt {
+  position: relative;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  background: #ccc;
+  border-bottom: 1px solid #aaa;
+  border-top: 1px solid #eee;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 15px;
+  padding-right: 10px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  margin-right: 0px; }
+
+dd {
+  position: relative;
+  padding-bottom: 0px;
+  margin-left: 15px; }
+
+.hide {
+  height: 0px;
+  overflow: hidden; }
 
 button {
   background: #def; }

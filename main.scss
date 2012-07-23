@@ -4,20 +4,68 @@ body {
 }
 
 h1, form, #functions, #allresults {
-	margin-left: 20px;
-}
-
-#explanation {
-	width: 480px;
+	position: absolute;
+	margin-left: 10px;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	border: 2px solid #eee;
-	h1 {
-		margin-left: 0px;
-		margin-top: 0px;
-		font-size: 14px;
+}
+
+form {
+	margin-top: 50px;
+}
+
+#functions {
+	margin-top: 100px;
+}
+
+#allresults {
+	margin-top: 200px;
+}
+
+dl {
+	position: relative;
+	float: right;
+	margin: {
+		left: 550px;
+		right: 15px;
+		top: 55px;
+		bottom: 0px;
 	}
-	padding: 12px;
+	padding: 0px;
+}
+
+dt {
+	position: relative;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: bold;
+	background: #ccc;
+	border-bottom: 1px solid #aaa;
+	border-top: 1px solid #eee;
+	padding: {
+		top: 5px;
+		bottom: 5px;
+		left: 15px;
+		right: 10px;
+	}
+	margin: {
+		top: 0px;
+		bottom: 0px;
+		left: 0px;
+		right: 0px;
+	}
+}
+dd {
+	position: relative;
+	padding: {
+		bottom: 0px;
+	}
+	margin-left: 15px;
+}
+
+.hide { 
+	height: 0px;
+	overflow: hidden;
 }
 
 button {
