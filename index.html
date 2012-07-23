@@ -815,16 +815,17 @@ $(document).ready(function() {
 
 /* Set up the definition list */
 	(function(){
-		var dd = $('dd');
-		dd.filter(':nth-child(n+4)').addClass('hide');
+		$('dd').filter(':nth-child(n+4)').addClass('hide');
 
-		var dt = $('dt');
-		dt.on('click', function() {
-			var $this = $(this);
-			if ( $this.next().hasClass('hide') ) {
-				$this.next().removeClass('hide');
+/* You only have one listener here, the definition LIST. However, the 'dt' means that 
+the function will only run when the click was on a <dt></dt> item. */
+		$('dl').on('click', 'dt', function() {
+			var $this = $(this).next();
+
+			if ( $this.hasClass('hide') ) {
+				$this.removeClass('hide');
 			} else {
-				$this.next().addClass('hide');
+				$this.addClass('hide');
 			}
 		});
 
